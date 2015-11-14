@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/relativeLayout1"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent" >
+
+    <TextView
+        android:id="@+id/spdif_name"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:background="@android:color/holo_red_light"
+        android:gravity="center"
+        android:text="@string/case_spdif_name"
+        android:textAppearance="?android:attr/textAppearanceMedium" />
+
+    <Button
+        android:id="@+id/redo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/spdif_name"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="20dp"
+        android:text="@string/case_speaker_btn_redo" />
+
+    <Button
+        android:id="@+id/button_left"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/redo"
+        android:layout_toLeftOf="@+id/redo"
+        android:text="@string/case_spdif_left" />
+
+    <Button
+        android:id="@+id/button_right"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/redo"
+        android:layout_toRightOf="@+id/redo"
+        android:text="@string/case_spdif_right" />
+
+    <CheckBox
+        android:id="@+id/checkBoxTrue_left"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/button_left"
+        android:layout_below="@+id/button_left"
+        android:text="@string/case_spdif_true" />
+
+    <CheckBox
+        android:id="@+id/checkBoxFalse_left"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/checkBoxTrue_left"
+        android:layout_below="@+id/checkBoxTrue_left"
+        android:text="@string/case_spdif_false" />
+
+    <CheckBox
+        android:id="@+id/checkBoxTrue_right"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignRight="@+id/button_right"
+        android:layout_below="@+id/button_right"
+        android:text="@string/case_spdif_true" />
+
+    <CheckBox
+        android:id="@+id/checkBoxFalse_right"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignRight="@+id/checkBoxTrue_right"
+        android:layout_below="@+id/checkBoxTrue_right"
+        android:text="@string/case_spdif_false" />
+
+</RelativeLayout>

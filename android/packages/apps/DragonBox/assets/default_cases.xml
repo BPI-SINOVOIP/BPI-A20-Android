@@ -1,0 +1,26 @@
+<TestCase save_report="1" >
+    <CaseComprehensive>
+        <CaseVersion>
+            <Passable>
+            </Passable>
+        </CaseVersion>
+        <CaseMemory>
+            <Passable minCap="" >
+            </Passable>
+        </CaseMemory>
+        <CaseWifi>
+            <Passable maxRSSI="120" >
+            </Passable>
+        </CaseWifi>
+        <CaseElthernet>
+        </CaseElthernet>
+        <CaseSpdif>
+        </CaseSpdif>
+        <CaseCvbs>
+        </CaseCvbs>
+        <CaseHdmi>
+        </CaseHdmi>
+        <CaseVideo>
+        </CaseVideo>
+    </CaseComprehensive>
+</TestCase>
