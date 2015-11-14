@@ -1,0 +1,89 @@
+argc = 2
+input name sys_config.fex
+Script 1 source file Path=/home/dangku/mydroid/bananaPi/r1/source/android/BPI-R1-Android4.2.2/lichee/tools/pack_brandy/out/sys_config.fex
+Script 1 bin file Path=/home/dangku/mydroid/bananaPi/r1/source/android/BPI-R1-Android4.2.2/lichee/tools/pack_brandy/out/sys_config.bin
+parser 1 file ok
+----------
+argc = 2
+input name sys_partition.fex
+Script 1 source file Path=/home/dangku/mydroid/bananaPi/r1/source/android/BPI-R1-Android4.2.2/lichee/tools/pack_brandy/out/sys_partition.fex
+Script 1 bin file Path=/home/dangku/mydroid/bananaPi/r1/source/android/BPI-R1-Android4.2.2/lichee/tools/pack_brandy/out/sys_partition.bin
+parser 1 file ok
+----------
+mbr count = 4
+
+partitation file Path=/home/dangku/mydroid/bananaPi/r1/source/android/BPI-R1-Android4.2.2/lichee/tools/pack_brandy/out/sys_partition.bin
+mbr_name file Path=/home/dangku/mydroid/bananaPi/r1/source/android/BPI-R1-Android4.2.2/lichee/tools/pack_brandy/out/sunxi_mbr.fex
+download_name file Path=/home/dangku/mydroid/bananaPi/r1/source/android/BPI-R1-Android4.2.2/lichee/tools/pack_brandy/out/dlinfo.fex
+
+mbr size = 16384
+mbr magic softw411
+disk name=bootloader
+disk name=env
+disk name=boot
+disk name=system
+disk name=recovery
+disk name=databk
+disk name=misc
+disk name=private
+disk name=data
+disk name=cache
+disk name=UDISK
+this is not a partition key
+update_for_part_info 0
+crc 0 = b27b107
+crc 1 = 9e9ae05a
+crc 2 = fb2c15fc
+crc 3 = 6e9144a1
+update mbr file ok
+----------
+
+boot0 file Path=/home/dangku/mydroid/bananaPi/r1/source/android/BPI-R1-Android4.2.2/lichee/tools/pack_brandy/out/boot0_nand.fex
+script file Path=/home/dangku/mydroid/bananaPi/r1/source/android/BPI-R1-Android4.2.2/lichee/tools/pack_brandy/out/sys_config.bin
+
+script update boot0 ok
+----------
+
+boot0 file Path=/home/dangku/mydroid/bananaPi/r1/source/android/BPI-R1-Android4.2.2/lichee/tools/pack_brandy/out/boot0_sdcard.fex
+script file Path=/home/dangku/mydroid/bananaPi/r1/source/android/BPI-R1-Android4.2.2/lichee/tools/pack_brandy/out/sys_config.bin
+
+script update boot0 ok
+----------
+
+uboot file Path=/home/dangku/mydroid/bananaPi/r1/source/android/BPI-R1-Android4.2.2/lichee/tools/pack_brandy/out/u-boot.fex
+script file Path=/home/dangku/mydroid/bananaPi/r1/source/android/BPI-R1-Android4.2.2/lichee/tools/pack_brandy/out/sys_config.bin
+
+----------
+
+fes1 file Path=/home/dangku/mydroid/bananaPi/r1/source/android/BPI-R1-Android4.2.2/lichee/tools/pack_brandy/out/fes1.fex
+script file Path=/home/dangku/mydroid/bananaPi/r1/source/android/BPI-R1-Android4.2.2/lichee/tools/pack_brandy/out/sys_config.bin
+
+script update fes1 ok
+----------
+/home/dangku/mydroid/bananaPi/r1/source/android/BPI-R1-Android4.2.2/lichee/tools/pack_brandy/pctools/linux/eDragonEx/
+/home/dangku/mydroid/bananaPi/r1/source/android/BPI-R1-Android4.2.2/lichee/tools/pack_brandy/out
+Begin Parse sys_partion.fex
+Add partion bootloader.fex BOOTLOADER_FEX00
+Add partion very bootloader.fex BOOTLOADER_FEX00
+FilePath: bootloader.fex
+FileLength=ee6c00 FileSizeHigh=0
+Add partion env.fex ENV_FEX000000000
+Add partion very env.fex ENV_FEX000000000
+FilePath: env.fex
+FileLength=20000 FileSizeHigh=0
+Add partion boot.fex BOOT_FEX00000000
+Add partion very boot.fex BOOT_FEX00000000
+FilePath: boot.fex
+FileLength=b4b000 FileSizeHigh=0
+Add partion system.fex SYSTEM_FEX000000
+Add partion very system.fex SYSTEM_FEX000000
+FilePath: system.fex
+FileLength=1ca504f8 FileSizeHigh=0
+Add partion recovery.fex RECOVERY_FEX0000
+Add partion very recovery.fex RECOVERY_FEX0000
+FilePath: recovery.fex
+FileLength=bf8800 FileSizeHigh=0
+Add partion diskfs.fex DISKFS_FEX000000
+BuildImg 0
+Dragon execute image.cfg SUCCESS !
+----------

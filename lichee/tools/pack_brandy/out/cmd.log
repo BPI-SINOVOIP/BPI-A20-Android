@@ -1,0 +1,26 @@
+/home/dangku/mydroid/bananaPi/r1/source/android/BPI-R1-Android4.2.2/lichee/tools/pack_brandy/pctools/linux/eDragonEx/
+/home/dangku/mydroid/bananaPi/r1/source/android/BPI-R1-Android4.2.2/lichee/tools/pack_brandy/out
+Begin Parse sys_partion.fex
+Add partion bootloader.fex BOOTLOADER_FEX00
+Add partion very bootloader.fex BOOTLOADER_FEX00
+FilePath: bootloader.fex
+FileLength=ee6c00 FileSizeHigh=0
+Add partion env.fex ENV_FEX000000000
+Add partion very env.fex ENV_FEX000000000
+FilePath: env.fex
+FileLength=20000 FileSizeHigh=0
+Add partion boot.fex BOOT_FEX00000000
+Add partion very boot.fex BOOT_FEX00000000
+FilePath: boot.fex
+FileLength=b4b000 FileSizeHigh=0
+Add partion system.fex SYSTEM_FEX000000
+Add partion very system.fex SYSTEM_FEX000000
+FilePath: system.fex
+FileLength=1ca504f8 FileSizeHigh=0
+Add partion recovery.fex RECOVERY_FEX0000
+Add partion very recovery.fex RECOVERY_FEX0000
+FilePath: recovery.fex
+FileLength=bf8800 FileSizeHigh=0
+Add partion diskfs.fex DISKFS_FEX000000
+BuildImg 0
+Dragon execute image.cfg SUCCESS !
