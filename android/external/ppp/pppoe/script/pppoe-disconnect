@@ -1,0 +1,33 @@
+#!/system/bin/sh
+
+#******************************************
+# Usage       :awlog [log_string]
+# Description :Print the log to the anddroid log system 
+#              or the shell .
+#******************************************
+function awlog(){
+if [ $# -eq 1 ]
+then
+    echo $1
+    log -t AW-PPPoE $1
+fi
+}
+
+PPPOE_SESSION_FILE=/data/system/pppoe.session
+PPPOE_PID_1=`cat /data/system/pppoe.pid`
+PPPOE_PID_2=`ps | busybox grep system/bin/pppoe | busybox awk '{print $2}'`
+if [ -n $PPPOE_PID_1 ] && [ -n $PPPOE_PID_2 ] && [ $PPPOE_PID_1 = $PPPOE_PID_2 ]
+then
+    linkup=`cat /sys/class/net/eth0/carrier`
+    echo $linkup
+    if [ "1" = "$linkup" ]
+    then
+        kill -1 $PPPOE_PID_1
+        awlog "linkup"
+    else
+        kill -1 $PPPOE_PID_1
+        awlog "linkdown"
+    fi
+    SESSION_ID=`cat $PPPOE_SESSION_FILE`
+    awlog "pppoe session file exit. SESSION: $SESSION_ID"
+fi
