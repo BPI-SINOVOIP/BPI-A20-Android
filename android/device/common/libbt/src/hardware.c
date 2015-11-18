@@ -50,7 +50,7 @@
 ******************************************************************************/
 
 #ifndef BTHW_DBG
-#define BTHW_DBG FALSE
+#define BTHW_DBG TRUE
 #endif
 
 #if (BTHW_DBG == TRUE)

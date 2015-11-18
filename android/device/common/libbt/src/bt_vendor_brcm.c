@@ -32,7 +32,7 @@
 #include "userial_vendor.h"
 
 #ifndef BTVND_DBG
-#define BTVND_DBG FALSE
+#define BTVND_DBG TRUE
 #endif
 
 #if (BTVND_DBG == TRUE)

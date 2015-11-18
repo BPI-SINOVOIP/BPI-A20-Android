@@ -40,6 +40,33 @@ void bcm_wlan_free_oob_gpio(void)
 }
 #endif
 
+uint bcm_wlan_get_oob_gpio(void)
+{
+	uint oob_gpio = 0;
+#ifdef CONFIG_MACH_ODROID_4210
+	printk("GPIO(WL_HOST_WAKE) = EXYNOS4_GPX0(7) = %d\n", EXYNOS4_GPX0(7));
+	oob_gpio = EXYNOS4_GPX0(7);
+#endif
+#ifdef CUSTOMER_HW_ALLWINNER
+	script_item_value_type_e type;
+	script_item_u val;
+	int ret, wl_host_wake = 0;
+
+	type = script_get_item("wifi_para", "ap6xxx_wl_host_wake", &val);
+	if (SCIRPT_ITEM_VALUE_TYPE_PIO != type) {
+		printk("get bcmdhd wl_host_wake gpio failed\n");
+		return 0;
+	} else {
+		wl_host_wake = val.gpio.gpio;
+	}
+	printk("GPIO(WL_HOST_WAKE) = %d\n", wl_host_wake);
+
+	oob_gpio = wl_host_wake;
+#endif
+
+	return oob_gpio;
+}
+
 uint bcm_wlan_get_oob_irq(void)
 {
 	uint host_oob_irq = 0;

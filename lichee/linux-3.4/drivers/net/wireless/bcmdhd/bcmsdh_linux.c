@@ -30,6 +30,10 @@ extern void dhdsdio_isr(void * args);
 #include <linux/platform_data/gpio-odin.h>
 #endif /* defined(CONFIG_ARCH_ODIN) */
 #include <dhd_linux.h>
+#include <mach/gpio.h>
+
+extern uint bcm_wlan_get_oob_gpio(void);
+static u32 int_handle = 0;
 
 /* driver info, initialized when bcmsdh_register is called */
 static bcmsdh_driver_t drvinfo = {NULL, NULL, NULL, NULL};
@@ -297,6 +301,7 @@ void bcmsdh_oob_intr_set(bcmsdh_info_t *bcmsdh, bool enable)
 	spin_unlock_irqrestore(&bcmsdh_osinfo->oob_irq_spinlock, flags);
 }
 
+#if 0
 static irqreturn_t wlan_oob_irq(int irq, void *dev_id)
 {
 	bcmsdh_info_t *bcmsdh = (bcmsdh_info_t *)dev_id;
@@ -307,12 +312,25 @@ static irqreturn_t wlan_oob_irq(int irq, void *dev_id)
 
 	return IRQ_HANDLED;
 }
+#else
+static u32 wlan_oob_irq(bcmsdh_info_t *bcmsdh)
+{
+	bcmsdh_os_info_t *bcmsdh_osinfo = bcmsdh->os_cxt;
+
+	bcmsdh_oob_intr_set(bcmsdh, FALSE);
+	bcmsdh_osinfo->oob_irq_handler(bcmsdh_osinfo->oob_irq_handler_context);
+
+	return 0;
+}
+
+#endif
 
 int bcmsdh_oob_intr_register(bcmsdh_info_t *bcmsdh, bcmsdh_cb_fn_t oob_irq_handler,
 	void* oob_irq_handler_context)
 {
 	int err = 0;
 	bcmsdh_os_info_t *bcmsdh_osinfo = bcmsdh->os_cxt;
+	uint oob_gpio = 0;
 
 	SDLX_MSG(("%s: Enter\n", __FUNCTION__));
 	if (bcmsdh_osinfo->oob_irq_registered) {
@@ -334,14 +352,21 @@ int bcmsdh_oob_intr_register(bcmsdh_info_t *bcmsdh, bcmsdh_cb_fn_t oob_irq_handl
 	err = odin_gpio_sms_request_irq(bcmsdh_osinfo->oob_irq_num, wlan_oob_irq,
 		bcmsdh_osinfo->oob_irq_flags, "bcmsdh_sdmmc", bcmsdh);
 #else
+#if 0
 	err = request_irq(bcmsdh_osinfo->oob_irq_num, wlan_oob_irq,
 		bcmsdh_osinfo->oob_irq_flags, "bcmsdh_sdmmc", bcmsdh);
+#else
+	oob_gpio = bcm_wlan_get_oob_gpio();
+	SDLX_MSG(("%s: sw_gpio_irq_request(oob_gpio = %d)\n", __FUNCTION__, oob_gpio));
+	int_handle = sw_gpio_irq_request(oob_gpio, TRIG_LEVL_HIGH, (peint_handle)wlan_oob_irq, bcmsdh);
+#endif
+
 #endif /* defined(CONFIG_ARCH_ODIN) */
-	if (err) {
+	if (!int_handle) {
 		bcmsdh_osinfo->oob_irq_enabled = FALSE;
 		bcmsdh_osinfo->oob_irq_registered = FALSE;
 		SDLX_MSG(("%s: request_irq failed with %d\n", __FUNCTION__, err));
-		return err;
+		return -EBUSY;
 	}
 
 #if defined(DISABLE_WOWLAN)

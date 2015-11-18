@@ -53,11 +53,9 @@ static int rfkill_set_power(void *data, bool blocked)
 			break;
 		case 10: /* ap6335 */
             if (!blocked) {
-				//wifi_pm_gpio_ctrl("ap6xxx_bt_wake", 1);
                 wifi_pm_gpio_ctrl("ap6xxx_bt_regon", 1);
             } else {
                 wifi_pm_gpio_ctrl("ap6xxx_bt_regon", 0);
-				//wifi_pm_gpio_ctrl("ap6xxx_bt_wake", 0);
             }
             break;
 		case 11: /* realtek rtl8723au */
@@ -83,6 +81,8 @@ static int sw_rfkill_probe(struct platform_device *pdev)
 {
     int ret = 0;
 
+	printk("%s\n", __func__);
+
     sw_rfkill = rfkill_alloc(bt_name, &pdev->dev, 
                         RFKILL_TYPE_BLUETOOTH, &sw_rfkill_ops, NULL);
     if (unlikely(!sw_rfkill))
@@ -92,6 +92,7 @@ static int sw_rfkill_probe(struct platform_device *pdev)
     if (unlikely(ret)) {
         rfkill_destroy(sw_rfkill);
     }
+	
     return ret;
 }
 

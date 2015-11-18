@@ -180,8 +180,8 @@ int btif_config_get(const char* section, const char* key, const char* name, char
 {
     int ret = FALSE;
     asrt(section && *section && key && *key && name && *name && bytes && type);
-    //debug("section:%s, key:%s, name:%s, value:%p, bytes:%d, type:%d",
-    //            section, key, name, value, *bytes, *type);
+    BTIF_TRACE_ERROR6("section:%s, key:%s, name:%s, value:%p, bytes:%d, type:%d",
+                section, key, name, value, *bytes, *type);
     if(section && *section && key && *key && name && *name && bytes && type)
     {
         lock_slot(&slot_lock);

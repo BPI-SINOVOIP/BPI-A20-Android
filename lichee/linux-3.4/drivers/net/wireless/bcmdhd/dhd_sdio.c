@@ -1134,7 +1134,7 @@ dhdsdio_htclk(dhd_bus_t *bus, bool on, bool pendok)
 	uint8 clkctl, clkreq, devctl;
 	bcmsdh_info_t *sdh;
 
-	DHD_ERROR(("%s: Enter\n", __FUNCTION__));
+	DHD_TRACE(("%s: Enter\n", __FUNCTION__));
 
 	clkctl = 0;
 	sdh = bus->sdh;
@@ -1256,7 +1256,6 @@ dhdsdio_htclk(dhd_bus_t *bus, bool on, bool pendok)
 		}
 
 		bus->clkstate = CLK_SDONLY;
-		
 		if (!SR_ENAB(bus)) {
 			bcmsdh_cfg_write(sdh, SDIO_FUNC_1, SBSDIO_FUNC1_CHIPCLKCSR, clkreq, &err);
 			DHD_INFO(("CLKCTL: turned OFF\n"));
@@ -1365,7 +1364,7 @@ dhdsdio_clkctl(dhd_bus_t *bus, uint target, bool pendok)
 	uint oldstate = bus->clkstate;
 #endif /* DHD_DEBUG */
 
-	DHD_ERROR(("%s: Enter\n", __FUNCTION__));
+	DHD_TRACE(("%s: Enter\n", __FUNCTION__));
 
 	/* Early exit if we're already there */
 	if (bus->clkstate == target) {
@@ -1378,8 +1377,6 @@ dhdsdio_clkctl(dhd_bus_t *bus, uint target, bool pendok)
 		}
 		return ret;
 	}
-
-	DHD_ERROR(("%s: bus->clkstate = %d\n", __FUNCTION__, bus->clkstate));
 
 	switch (target) {
 	case CLK_AVAIL:
@@ -4054,8 +4051,6 @@ dhdsdio_download_state(dhd_bus_t *bus, bool enter)
 		/* Allow HT Clock now that the ARM is running. */
 		bus->alp_only = FALSE;
 
-		DHD_ERROR(("%s: After download firmware, Allow HT clock now that ARM is running", __FUNCTION__));
-
 		bus->dhd->busstate = DHD_BUS_LOAD;
 	}
 
@@ -4332,7 +4327,7 @@ dhd_bus_init(dhd_pub_t *dhdp, bool enforce_mutex)
 	int err, ret = 0;
 	uint8 saveclk;
 
-	DHD_ERROR(("%s: Enter\n", __FUNCTION__));
+	DHD_TRACE(("%s: Enter\n", __FUNCTION__));
 
 	ASSERT(bus->dhd);
 	if (!bus->dhd)

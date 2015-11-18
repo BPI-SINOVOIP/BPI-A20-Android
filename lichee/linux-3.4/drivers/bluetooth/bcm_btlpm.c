@@ -57,9 +57,9 @@
 #include <linux/serial_core.h>
 #include "hci_uart.h"
 
-#define BT_SLEEP_DBG
+//#define BT_SLEEP_DBG
 #ifdef  BT_SLEEP_DBG
-#define BT_DBG(fmt, arg...) printk(KERN_ERR "[BT_LPM] %s: " fmt "\n" , __func__ , ## arg)
+#define BT_DBG(fmt, arg...) printk(KERN_DEBUG "[BT_LPM] %s: " fmt "\n" , __func__ , ## arg)
 #else
 #define BT_DBG(fmt, arg...)
 #endif
@@ -83,6 +83,8 @@ struct bluesleep_info {
 	unsigned host_wake_assert:1;
 	unsigned bt_wake_assert:1;
 };
+
+static u32 int_handle = 0;
 
 /* work function */
 static void bluesleep_sleep_work(struct work_struct *work);
@@ -415,6 +417,7 @@ static void bluesleep_tx_timer_expire(unsigned long data)
  * @param irq Not used.
  * @param dev_id Not used.
  */
+#if 0
 static irqreturn_t bluesleep_hostwake_isr(int irq, void *dev_id)
 {
 	/* schedule a tasklet to handle the change in the host wake line */
@@ -422,6 +425,15 @@ static irqreturn_t bluesleep_hostwake_isr(int irq, void *dev_id)
 	wake_lock(&bsi->wake_lock);
 	return IRQ_HANDLED;
 }
+#else
+static u32 bluesleep_hostwake_isr(void)
+{
+	/* schedule a tasklet to handle the change in the host wake line */
+	tasklet_schedule(&hostwake_task);
+	wake_lock(&bsi->wake_lock);
+	return 0;
+}
+#endif
 
 /**
  * Starts the Sleep-Mode Protocol on the Host.
@@ -453,6 +465,7 @@ static int bluesleep_start(void)
 	/* assert BT_WAKE */
 	gpio_set_value(bsi->ext_wake, bsi->bt_wake_assert);
 
+#if 0
 	if (bsi->host_wake_assert)
 		retval = request_irq(bsi->host_wake_irq, bluesleep_hostwake_isr, IRQF_DISABLED | IRQF_TRIGGER_RISING, \
 			"bluetooth hostwake", NULL);
@@ -463,6 +476,16 @@ static int bluesleep_start(void)
 		BT_ERR("Couldn't acquire bt_host_wake IRQ or enable it");
 		goto fail;
 	}
+#else
+	if (bsi->host_wake_assert)
+		int_handle = sw_gpio_irq_request(bsi->host_wake, TRIG_LEVL_HIGH, (peint_handle)bluesleep_hostwake_isr, NULL);
+	else
+		int_handle = sw_gpio_irq_request(bsi->host_wake, TRIG_LEVL_LOW, (peint_handle)bluesleep_hostwake_isr, NULL);
+	if (int_handle < 0) {
+		BT_ERR("Couldn't acquire bt_host_wake IRQ or enable it");
+		goto fail;
+	}
+#endif
 
 	set_bit(BT_PROTO, &flags);
 	wake_lock(&bsi->wake_lock);
@@ -735,17 +758,15 @@ static int __init bluesleep_probe(struct platform_device *pdev)
 		return ret;
 	}
 	
-	//2.get bt_host_wake gpio irq
 	gpio_direction_input(bsi->host_wake);
-
-#if 0
 	bsi->host_wake_irq = gpio_to_irq(bsi->host_wake);
 	if (IS_ERR_VALUE(bsi->host_wake_irq)) {
 		BT_ERR("map gpio [%d] to virq failed, errno = %d\n",bsi->host_wake, bsi->host_wake_irq);
 		ret = -ENODEV;
 		goto free_bt_ext_wake;
 	}
-#endif
+
+	BT_ERR("%s: @@@@@@@@@@@@@@@@@@@ got host_wake_irq = %d\n", __func__, bsi->host_wake_irq);
 
 	return 0;
 
@@ -807,7 +828,7 @@ static int __init bluesleep_init(void)
 		return retval;
 	}
   
-	BT_INFO("MSM Sleep Mode Driver Ver %s", VERSION);
+	BT_INFO("Broadcom BT Sleep Mode Driver Ver %s", VERSION);
 
 	retval = platform_driver_probe(&bluesleep_driver, bluesleep_probe);
 	if (retval)

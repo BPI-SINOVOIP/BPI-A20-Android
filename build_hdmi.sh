@@ -5,7 +5,7 @@ cd ..
 cd ./android
 ls
 source build/envsetup.sh
-lunch R1_Qbox-userdebug
+lunch R1_Qbox-eng
 extract-bsp
 make -j8
 pack

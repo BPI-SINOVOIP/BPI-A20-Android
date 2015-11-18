@@ -22,7 +22,8 @@
 // SERVICE_CLASS:0x5A (Bit17 -Networking,Bit19 - Capturing,Bit20 -Object Transfer,Bit22 -Telephony)
 // MAJOR CLASS: COMPUTER
 // MINOR CLASS: TABLET
-#define BTA_DM_COD {0x1A, 0x01, 0x14}
+//#define BTA_DM_COD {0x1A, 0x01, 0x14}
+#define BTA_DM_COD {0x5A, 0x01, 0x1C}
 
 #define BTIF_HF_SERVICES (BTA_HSP_SERVICE_MASK)
 #define BTIF_HF_SERVICE_NAMES  { BTIF_HSAG_SERVICE_NAME }

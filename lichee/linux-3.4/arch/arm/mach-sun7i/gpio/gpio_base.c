@@ -168,6 +168,8 @@ int __pio_to_irq(struct gpio_chip *chip, unsigned offset)
 {
     struct aw_gpio_chip *pchip = to_aw_gpiochip(chip);
 
+	printk("%s\n", __func__);
+
     if (true == is_gpio_canbe_eint(chip->base + offset)) {
         return pchip->irq_num;
     }

@@ -749,7 +749,7 @@ u32 sw_gpio_irq_request(u32 gpio, enum gpio_eint_trigtype trig_type,
     struct gpio_config_eint_all cfg = {0};
     struct gpio_irq_handle *pdev_id = NULL;
 
-    PIO_DBG("%s: gpio %d, trig %d, handle 0x%08x, para 0x%08x\n", __func__,
+    PIO_ERR("%s: gpio %d, trig %d, handle 0x%08x, para 0x%08x\n", __func__,
             gpio, trig_type, (u32)handle, (u32)para);
 
     WARN(NULL == handle, "%s: NULL handle\n", __func__);
@@ -780,7 +780,7 @@ u32 sw_gpio_irq_request(u32 gpio, enum gpio_eint_trigtype trig_type,
     pdev_id->parg    = para;
 
     irq_no = __gpio_to_irq(gpio);
-    PIO_DBG("%s: __gpio_to_irq return %d\n", __func__, irq_no);
+    PIO_ERR("%s: __gpio_to_irq return %d\n", __func__, irq_no);
 
     irq_ret = request_irq(irq_no, gpio_irq_hdl, IRQF_DISABLED | IRQF_SHARED, "gpio_irq", (void *)pdev_id);
     if (irq_ret) {

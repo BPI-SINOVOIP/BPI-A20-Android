@@ -478,6 +478,10 @@ static int __devinit gpio_sw_probe(struct platform_device *dev)
 		kfree(sw_gpio_entry);
 		return -1;
 	}
+
+	/* bpi, free the gpio for other request */
+	gpio_free(sw_gpio_entry->class.item->gpio.gpio);
+	
 	return 0;
 }
 

@@ -40,7 +40,7 @@
 ******************************************************************************/
 
 #ifndef VNDUSERIAL_DBG
-#define VNDUSERIAL_DBG FALSE
+#define VNDUSERIAL_DBG TRUE
 #endif
 
 #if (VNDUSERIAL_DBG == TRUE)
@@ -234,10 +234,11 @@ int userial_vendor_open(tUSERIAL_CFG *p_cfg)
         ALOGE("userial vendor open: unable to open %s", vnd_userial.port_name);
         return -1;
     }
-#ifdef USE_AP6210_BT_MODULE
-	usleep(100000);
-	close(vnd_userial.fd);
-	if ((vnd_userial.fd = open(vnd_userial.port_name, O_RDWR)) == -1)
+#if (defined(USE_AP6210_BT_MODULE) || defined(USE_AP6335_BT_MODULE))
+    usleep(100000);	
+    close(vnd_userial.fd);
+    ALOGE("close serial and open again");
+    if ((vnd_userial.fd = open(vnd_userial.port_name, O_RDWR)) == -1)
     {
         ALOGE("userial vendor open: unable to open %s", vnd_userial.port_name);
         return -1;
