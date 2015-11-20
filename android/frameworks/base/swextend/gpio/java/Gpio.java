@@ -46,56 +46,59 @@ public class Gpio
 	private static native int nativeReadGpio(String path);
 
 	private static final String  mPathstr      = "/sys/class/gpio_sw/P";
+	private static final String  mFuncName	   = "/cfg";
 	private static final String  mDataName     = "/data";
 	private static final String  mPullName     = "/pull";
 	private static final String  mDrvLevelName = "/drv_level";
 	private static final String  mMulSelName   = "/mul_sel";
 
 	public static int writeGpio(char group, int num, int value){
-	    String dataPath = composePinPath(group, num).concat(mDataName);
-
+		String dataPath = composePinPath(group, num).concat(mDataName);
 		return nativeWriteGpio(dataPath, Integer.toString(value));
 	}
 
 	public static int readGpio(char group, int num){
-	    String dataPath = composePinPath(group, num).concat(mDataName);
+		String dataPath = composePinPath(group, num).concat(mDataName);
+		return nativeReadGpio(dataPath);
+	}
 
+	public static int setFunc(char group, int num, int value){
+		String dataPath = composePinPath(group, num).concat(mFuncName);
+                return nativeWriteGpio(dataPath, Integer.toString(value));
+	}
+
+	public static int getFunc(char group, int num){
+		String dataPath = composePinPath(group, num).concat(mFuncName);
 		return nativeReadGpio(dataPath);
 	}
 
 	public static int setPull(char group, int num, int value){
-	    String dataPath = composePinPath(group, num).concat(mPullName);
-
+		String dataPath = composePinPath(group, num).concat(mPullName);
 		return nativeWriteGpio(dataPath, Integer.toString(value));
 	}
 
 	public static int getPull(char group, int num){
-	    String dataPath = composePinPath(group, num).concat(mPullName);
-
+		String dataPath = composePinPath(group, num).concat(mPullName);
 		return nativeReadGpio(dataPath);
 	}
 
 	public static int setDrvLevel(char group, int num, int value){
-	    String dataPath = composePinPath(group, num).concat(mDrvLevelName);
-
+		String dataPath = composePinPath(group, num).concat(mDrvLevelName);
 		return nativeWriteGpio(dataPath, Integer.toString(value));
 	}
 
 	public static int getDrvLevel(char group, int num){
-	    String dataPath = composePinPath(group, num).concat(mDrvLevelName);
-
+		String dataPath = composePinPath(group, num).concat(mDrvLevelName);
 		return nativeReadGpio(dataPath);
 	}
 
 	public static int setMulSel(char group, int num, int value){
-	    String dataPath = composePinPath(group, num).concat(mMulSelName);
-
+		String dataPath = composePinPath(group, num).concat(mMulSelName);
 		return nativeWriteGpio(dataPath, Integer.toString(value));
 	}
 
 	public static int getMulSel(char group, int num){
-	    String dataPath = composePinPath(group, num).concat(mMulSelName);
-
+		String dataPath = composePinPath(group, num).concat(mMulSelName);
 		return nativeReadGpio(dataPath);
 	}
 
@@ -105,7 +108,8 @@ public class Gpio
 
 		groupstr = String.valueOf(group).toUpperCase();
 		numstr = Integer.toString(num);
-        return mPathstr.concat(groupstr).concat(numstr);
-    }
+       		
+		return mPathstr.concat(groupstr).concat(numstr);
+    	}
 }
 

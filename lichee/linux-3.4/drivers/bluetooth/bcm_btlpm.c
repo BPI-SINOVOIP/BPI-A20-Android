@@ -478,9 +478,9 @@ static int bluesleep_start(void)
 	}
 #else
 	if (bsi->host_wake_assert)
-		int_handle = sw_gpio_irq_request(bsi->host_wake, TRIG_LEVL_HIGH, (peint_handle)bluesleep_hostwake_isr, NULL);
+		int_handle = sw_gpio_irq_request(bsi->host_wake, TRIG_EDGE_POSITIVE, (peint_handle)bluesleep_hostwake_isr, NULL);
 	else
-		int_handle = sw_gpio_irq_request(bsi->host_wake, TRIG_LEVL_LOW, (peint_handle)bluesleep_hostwake_isr, NULL);
+		int_handle = sw_gpio_irq_request(bsi->host_wake, TRIG_EDGE_NEGATIVE, (peint_handle)bluesleep_hostwake_isr, NULL);
 	if (int_handle < 0) {
 		BT_ERR("Couldn't acquire bt_host_wake IRQ or enable it");
 		goto fail;
@@ -526,7 +526,11 @@ static void bluesleep_stop(void)
 	atomic_inc(&open_count);
 
 	spin_unlock_irqrestore(&rw_lock, irq_flags);
+#if 0
 	free_irq(bsi->host_wake_irq, NULL);
+#else
+	sw_gpio_irq_free(int_handle);
+#endif
 	wake_lock_timeout(&bsi->wake_lock, HZ / 2);
 }
 /**
@@ -782,7 +786,11 @@ static int bluesleep_remove(struct platform_device *pdev)
 	/* assert bt wake */
 	gpio_set_value(bsi->ext_wake, bsi->bt_wake_assert);
 	if (test_bit(BT_PROTO, &flags)) {
+#if 0
 		free_irq(bsi->host_wake_irq, NULL);
+#else
+		sw_gpio_irq_free(int_handle);
+#endif
 		del_timer(&tx_timer);
 		if (test_bit(BT_ASLEEP, &flags))
 			hsuart_power(1);

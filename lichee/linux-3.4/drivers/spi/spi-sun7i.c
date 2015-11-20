@@ -1545,6 +1545,10 @@ static int __init sun7i_spi_probe(struct platform_device *pdev)
         goto err6;
     }
 
+	/* bpi, for 26pin control*/
+	if(aw_spi->master->bus_num == 1)
+		sun7i_spi_release_gpio(aw_spi);
+
     spi_inf("%s: reuuimlla's SoC SPI Driver loaded for Bus SPI%d with %d Slaves at most\n",
             __func__, pdev->id, master->num_chipselect);
     spi_inf("%s: spi%d driver probe succeed, base %p, irq %d, dma_id_rx %d, dma_id_tx %d\n",

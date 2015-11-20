@@ -223,7 +223,7 @@ twi3_scl            = port:PI0<3><default><default><default>
 twi3_sda            = port:PI1<3><default><default><default>
 
 [twi4_para]
-twi4_used           = 1
+twi4_used           = 0
 twi4_scl            = port:PI2<3><default><default><default>
 twi4_sda            = port:PI3<3><default><default><default>
 
@@ -261,7 +261,7 @@ uart_rts            = port:PI16<3><1><default><default>
 uart_cts            = port:PI17<3><1><default><default>
 
 [uart_para3]
-uart_used           = 3
+uart_used           = 1
 uart_port           = 3
 uart_type           = 4
 uart_tx             = port:PG06<4><1><default><default>
@@ -270,11 +270,11 @@ uart_rts            = port:PG08<4><1><default><default>
 uart_cts            = port:PG09<4><1><default><default>
 
 [uart_para4]
-uart_used           = 0
+uart_used           = 1
 uart_port           = 4
 uart_type           = 2
-uart_tx             = port:PH04<4><1><default><default>
-uart_rx             = port:PH05<4><1><default><default>
+uart_tx             = port:PG10<4><1><default><default>
+uart_rx             = port:PG11<4><1><default><default>
 
 [uart_para5]
 uart_used           = 0
@@ -299,6 +299,7 @@ uart_rx             = port:PA15<3><1><default><default>
 
 ;-------------------------------------------------------------------------------
 ;spi configuration
+;bus_num must be set as the same as spi number 
 ;-------------------------------------------------------------------------------
 [spi0_para]
 spi_used            = 0
@@ -335,6 +336,19 @@ spi_cs1             = port:PA09<3><default><default><default>
 spi_sclk            = port:PA06<3><default><default><default>
 spi_mosi            = port:PA07<3><default><default><default>
 spi_miso            = port:PA08<3><default><default><default>
+
+[spi_devices]
+spi_dev_num = 1
+
+[spi_board0]
+modalias = "spidev"
+max_speed_hz = 12000000
+bus_num = 0
+chip_select = 0
+mode = 3
+full_duplex = 0
+manual_cs = 0
+
 ;----------------------------------------------------------------------------------
 ;resistance tp configuration
 ;----------------------------------------------------------------------------------
@@ -1194,10 +1208,10 @@ rtl8192cu_wl_regon	 = port:PG04<1><default><default><0>
 
 ; 7 - ap6xxx sdio wifi + bt gpio config
 ap6xxx_wl_regon      = port:PH22<1><default><default><0>
-ap6xxx_wl_host_wake  = port:PH15<0><default><default><0>
+ap6xxx_wl_host_wake  = port:PH15<6><default><default><default>
 ap6xxx_bt_regon      = port:PB05<1><default><default><0>
 ap6xxx_bt_wake       = port:PI20<1><default><default><0>
-ap6xxx_bt_host_wake  = port:PI21<0><default><default><0>
+ap6xxx_bt_host_wake  = port:PH02<6><default><default><default>
 ap6xxx_lpo	     = port:PI12<0><default><default><0>
 ap6xxx_wl_host_wake_invert = 0
 
@@ -1220,8 +1234,8 @@ modem_used	= 1
 modem_usbc_num	= 2
 modem_uart_num	= 5
 modem_name		= "sim7100c"
-modem_vbat		= port:PG01<1><default><default><1>
-modem_pwr_on		= port:PG03<1><default><default><1>
+modem_vbat		= port:PG01<1><default><default><0>
+modem_pwr_on		= port:PG03<1><default><default><0>
 modem_wake		= 
 modem_rf_dis		= port:PG00<1><default><default><0>
 modem_rst		= port:PG02<1><default><default><0>
@@ -1265,9 +1279,12 @@ compass_int         = port:PI13<6><1><default><default>
 [bt_para]
 bt_used             = 1
 bt_uart_id          = 3
-bt_wakeup           = port:PI20<1><default><default><default>
+bt_wake             = port:PI20<1><default><default><default>
+bt_host_wake  	    = port:PH02<6><default><default><default>
 bt_gpio             = port:PI21<1><default><default><default>
 bt_rst              = port:PB05<1><default><default><default>
+bt_host_wake_invert   = 0
+;bt_wake_invert	    = 0
 
 [i2s_para]
 i2s_used            = 0
@@ -1374,14 +1391,53 @@ ir_addr_code        = 0xc617
 
 ;----------------------------------------------------------------------------------                                   
 ;gpio configuration
+;gpio_pin_1               = port:PB21<1><default><default><0>
+;gpio_pin_2               = port:PB20<1><default><default><0>
+;gpio_pin_3               = port:PI03<1><default><default><0>
+;gpio_pin_4               = port:PG10<1><default><default><0>
+;gpio_pin_5               = port:PG11<1><default><default><0>
+;gpio_pin_6               = port:PI19<1><default><default><0>
+;gpio_pin_7               = port:PH02<1><default><default><0>
+;gpio_pin_8               = port:PI18<1><default><default><0>
+;gpio_pin_9               = port:PI17<1><default><default><0>
+;gpio_pin_10              = port:PH20<1><default><default><0>
+;gpio_pin_11              = port:PH21<1><default><default><0>
+;gpio_pin_12              = port:PI12<1><default><default><0>
+;gpio_pin_13              = port:PI13<1><default><default><0>
+;gpio_pin_14              = port:PI16<1><default><default><0>
+;gpio_pin_15              = port:PI11<1><default><default><0>
+;gpio_pin_16              = port:PI10<1><default><default><0>
+;gpio_pin_17              = port:PI14<1><default><default><0>
+;gpio_pin_18              = port:PH24<1><default><default><0>
+;gpio_pin_19              = port:PH25<1><default><default><0>
+;gpio_pin_20              = port:PH26<1><default><default><0>
+;gpio_pin_21              = port:PH27<1><default><default><0>
 ;----------------------------------------------------------------------------------
 [gpio_para]                    
 gpio_used                = 1
-gpio_num                 = 1
-gpio_pin_1               = port:PH24<1><default><default><1>
-gpio_pin_2               = port:PH25<1><default><default><1>
-gpio_pin_3               = port:PH26<1><default><default><1>
-gpio_pin_4               = port:PH27<1><default><default><1>
+gpio_num                 = 21
+gpio_pin_1               = port:PB21<1><default><default><0>
+gpio_pin_2               = port:PB20<1><default><default><0>
+gpio_pin_3               = port:PI03<1><default><default><0>
+gpio_pin_4               = port:PG10<1><default><default><0>
+gpio_pin_5               = port:PG11<1><default><default><0>
+gpio_pin_6               = port:PI19<1><default><default><0>
+gpio_pin_7               = port:PH02<1><default><default><0>
+gpio_pin_8               = port:PI18<1><default><default><0>
+gpio_pin_9               = port:PI17<1><default><default><0>
+gpio_pin_10              = port:PH20<1><default><default><0>
+gpio_pin_11              = port:PH21<1><default><default><0>
+gpio_pin_12              = port:PI12<1><default><default><0>
+gpio_pin_13              = port:PI13<1><default><default><0>
+gpio_pin_14              = port:PI16<1><default><default><0>
+gpio_pin_15              = port:PI11<1><default><default><0>
+gpio_pin_16              = port:PI10<1><default><default><0>
+gpio_pin_17              = port:PI14<1><default><default><0>
+gpio_pin_18              = port:PH24<1><default><default><0>
+gpio_pin_19              = port:PH25<1><default><default><0>
+gpio_pin_20              = port:PH26<1><default><default><0>
+gpio_pin_21              = port:PH27<1><default><default><0>
+
 
 ;-------------------------------------------------------------------------------
 ;pmu_twi_addr           ---slave address
@@ -1590,6 +1646,6 @@ env_sub01 = "specialstr"
 ;auto_hpd     (auto detect hdmi/cvbs/ypbpr plug in)
 ;----------------------------------------------------------------------------------
 [boot_disp]
-output_type              = 2
+output_type              = 3
 output_mode              = 5
 auto_hpd                 = 1

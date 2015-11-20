@@ -403,7 +403,11 @@ void bcmsdh_oob_intr_unregister(bcmsdh_info_t *bcmsdh)
 		disable_irq(bcmsdh_osinfo->oob_irq_num);
 		bcmsdh_osinfo->oob_irq_enabled = FALSE;
 	}
+#if 0
 	free_irq(bcmsdh_osinfo->oob_irq_num, bcmsdh);
+#else
+	sw_gpio_irq_free(int_handle);
+#endif
 	bcmsdh_osinfo->oob_irq_registered = FALSE;
 }
 #endif

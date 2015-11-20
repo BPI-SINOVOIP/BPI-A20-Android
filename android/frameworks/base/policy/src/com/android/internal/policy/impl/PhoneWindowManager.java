@@ -615,6 +615,7 @@ public class PhoneWindowManager implements WindowManagerPolicy {
     private static final int FLICKER_INTERVAL = 30;
     private static final char portType = 'i';
     private static final int portNum = 16;
+    private static final int func = 1;
     private static final int on = 0;
     private static final int off = 1;
     private BroadcastReceiver mFlickerIntentReceiver = new BroadcastReceiver() {
@@ -624,12 +625,14 @@ public class PhoneWindowManager implements WindowManagerPolicy {
             Slog.d(TAG, "action = " + action);
             if (action.equals(Intent.ACTION_SCREEN_ON)) {
                 mFlickerEnable = true;
+		Gpio.setFunc(portType, portNum, func);
                 Gpio.writeGpio(portType, portNum, on);
             }else if (action.equals(Intent.ACTION_SCREEN_OFF)) {
                 mFlickerEnable = false;
                 mFlickerHandler.removeCallbacks(mStep1On);
                 mFlickerHandler.removeCallbacks(mStep2Off);
                 mFlickerHandler.removeCallbacks(mStep3On);
+		Gpio.setFunc(portType, portNum, func);
                 Gpio.writeGpio(portType, portNum, off);
             }
         }
@@ -638,6 +641,7 @@ public class PhoneWindowManager implements WindowManagerPolicy {
     private void startFlicker(){
         Slog.d("GpioService", "mFlickerEnable = " + mFlickerEnable);
         if(mFlickerEnable){
+	    Gpio.setFunc(portType, portNum, func);
             Gpio.writeGpio(portType, portNum, off);
             mFlickerHandler.removeCallbacks(mStep1On);
             mFlickerHandler.removeCallbacks(mStep2Off);
