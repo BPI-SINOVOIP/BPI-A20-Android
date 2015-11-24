@@ -1200,7 +1200,7 @@ wifi_power         = ""
 rtl8192cu_wl_regon	= port:PG05<1><default><default><0>
 
 ; 7 - rtl8821au usb wifi
-rtl8192cu_wl_regon	 = port:PG04<1><default><default><0>
+rtl8821au_wl_regon	 = port:PG04<1><default><default><0>
 
 ; 6 - rtl8188eu usb wifi
 ;rtk_rtl8188eu_wl_dis    = port:PH03<1><default><default><0>

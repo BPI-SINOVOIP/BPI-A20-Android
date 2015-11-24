@@ -87,13 +87,13 @@ static int rtl8821au_gpio_ctrl(int level)
 	else
 		flags = GPIOF_OUT_INIT_LOW;
 
-	ret = gpio_request_one(rtk_rtl8821au_wl_regon, flags, "rtl8912cu_wl_regon");
+	ret = gpio_request_one(rtk_rtl8821au_wl_regon, flags, "rtl8821au_wl_regon");
 	if (ret) {
-		rtl8821au_msg("failed to set gpio rtk_rtl8821au_wl_regon to %d !\n", level);
+		rtl8821au_msg("failed to set gpio rtl8821au_wl_regon to %d !\n", level);
 		return -1;
 	} else {
 		gpio_free(rtk_rtl8821au_wl_regon);
-		rtl8821au_msg("succeed to set gpio rtk_rtl8821au_wl_regon to %d !\n", level);
+		rtl8821au_msg("succeed to set gpio rtl8821au_wl_regon to %d !\n", level);
 	}
 
 	if (level) {

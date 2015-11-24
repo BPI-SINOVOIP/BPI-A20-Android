@@ -81,7 +81,7 @@ int platform_wifi_power_on(void)
 
 		printk("sw_usb_enable_hcd: usbc_num = %d\n", item.val);
 		
-#if 0 //DK
+#if 1 //DK
 		wifi_pm_power(1);
 		mdelay(10);
 #endif 
@@ -103,7 +103,7 @@ int platform_wifi_power_on(void)
 		}
 
 		printk("sw_usb_enable_hcd: usbc_num = %d\n", item.val);
-#if 0  //DK
+#if 1  //DK
 		wifi_pm_power(1);
 		mdelay(10);
 #endif
@@ -133,7 +133,7 @@ void platform_wifi_power_off(void)
 	sw_usb_disable_hcd(item.val);
 	#endif
 
-#if 0  //DK
+#if 1  //DK
 	wifi_pm_power(0);
 #endif
 
@@ -144,7 +144,7 @@ void platform_wifi_power_off(void)
 	sunxi_usb_disable_hcd(item.val);
 	#endif
 
-#if 0
+#if 1
 	wifi_pm_power(0);
 #endif
 

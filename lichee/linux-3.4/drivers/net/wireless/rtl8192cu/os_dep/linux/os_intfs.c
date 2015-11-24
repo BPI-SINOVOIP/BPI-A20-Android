@@ -175,9 +175,14 @@ char* ifname = "wlan%d";
 module_param(ifname, charp, 0644);
 MODULE_PARM_DESC(ifname, "The default name to allocate for first interface");
 
+#ifdef CONFIG_PLATFORM_ANDROID
+char* if2name = "p2p%d";
+#else 
 char* if2name = "wlan%d";
+#endif 
 module_param(if2name, charp, 0644);
 MODULE_PARM_DESC(if2name, "The default name to allocate for second interface");
+
 
 char* rtw_initmac = 0;  // temp mac address if users want to use instead of the mac address in Efuse
 
