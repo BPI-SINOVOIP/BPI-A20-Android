@@ -90,7 +90,7 @@ public class CaseSdcard extends BaseCase {
 		boolean hasExtSd(StorageVolume[] volumes) {
 			boolean st = false;
 			for (StorageVolume volume : volumes) {
-				if (volume.getPath().equals("/mnt/extsd")
+				if (volume.getPath().equals("/mnt/sdcard")
 						&& mStorageManager.getVolumeState(volume.getPath())
 								.equals("mounted")) {
 					st = true;
@@ -119,7 +119,7 @@ public class CaseSdcard extends BaseCase {
 			for (int i = 0; i < storageVolumes.length; i++) {
 				StorageVolume volume = storageVolumes[i];
 				Log.e(TAG, "==volume.getPath()==" + volume.getPath());
-				if (volume.getPath().equals("/mnt/extsd")) {
+				if (volume.getPath().equals("/mnt/sdcard")) {
 					Log.e(TAG, "=======extsd=========");
 
 					StatFs stat = new StatFs(volume.getPath());
@@ -167,7 +167,7 @@ public class CaseSdcard extends BaseCase {
 
 	private boolean write() {
 		boolean state = false;
-		String fileName = "/mnt/extsd/factoryRun";
+		String fileName = "/mnt/sdcard/factoryRun";
 		String str = "JustForTest.";
 		String str0 = "";
 		try {

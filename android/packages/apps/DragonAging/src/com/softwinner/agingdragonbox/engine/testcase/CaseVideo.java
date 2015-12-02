@@ -120,8 +120,7 @@ public class CaseVideo extends BaseCase implements OnPreparedListener,
 
 	public void playVideo(Uri uri) {
 		if (uri == null) {
-			// Log.e(Utils.APP_TAG,
-			// "##########playVideo()..error: uri is null!");
+			Log.e(Utils.APP_TAG, "##########playVideo()..error: uri is null!");
 			return;
 		}
 		try {

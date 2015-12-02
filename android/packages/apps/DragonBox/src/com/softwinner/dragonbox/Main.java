@@ -600,7 +600,7 @@ public class Main extends Activity implements UICallback, View.OnClickListener,
 
 	public boolean isRunSn() {
 		String extsd_sn_path = new String(
-				"/mnt/extsd/DragonBox/custom_sn_cases.xml");
+				"/mnt/sdcard/DragonBox/custom_sn_cases.xml");
 		String usbhost0_sn_path = new String(
 				"/mnt/usbhost0/DragonBox/custom_sn_cases.xml");
 		String usbhost1_sn_path = new String(

@@ -44,7 +44,7 @@ public final class DFEngine {
 	static final String TAG = "DFEngine";
 	static final boolean DEBUG = false;
 
-	public static final String EXTSD_CASE_MP3_NAME = "/mnt/extsd/DragonBox/testbox.mp3";
+	public static final String EXTSD_CASE_MP3_NAME = "/mnt/sdcard/DragonBox/testbox.mp3";
 	public static final String USBHOST0_CASE_MP3_NAME = "/mnt/usbhost0/DragonBox/testbox.mp3";
 	public static final String USBHOST1_CASE_MP3_NAME = "/mnt/usbhost1/DragonBox/testbox.mp3";
 	public static final String USBHOST2_CASE_MP3_NAME = "/mnt/usbhost2/DragonBox/testbox.mp3";
@@ -54,8 +54,8 @@ public final class DFEngine {
 			.getExternalStorageDirectory().getPath() + "/DragonBox/testbox.mp3";
 
 	/* 位于extsd上用于保存DragonBox配置信息的配置文件路径 */
-	public static final String EXTSD_CASE_FILE_NAME = "/mnt/extsd/DragonBox/custom_aging_cases.xml";
-	public static final String EXTSD_CASE_DIR = "/mnt/extsd/DragonBox/";
+	public static final String EXTSD_CASE_FILE_NAME = "/mnt/sdcard/DragonBox/custom_aging_cases.xml";
+	public static final String EXTSD_CASE_DIR = "/mnt/sdcard/DragonBox/";
 	/* 位于usbhost上用于保存DragonBox配置信息的配置文件路径 */
 	public static final String USBHOST0_CASE_FILE_NAME = "/mnt/usbhost0/DragonBox/custom_aging_cases.xml";
 	public static final String USBHOST0_CASE_DIR = "/mnt/usbhost0/DragonBox/";

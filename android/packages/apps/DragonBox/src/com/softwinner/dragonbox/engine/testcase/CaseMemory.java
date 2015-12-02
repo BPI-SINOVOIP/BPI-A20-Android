@@ -78,7 +78,7 @@ public class CaseMemory extends BaseCase {
 		boolean hasExtSd(StorageVolume[] volumes) {
 			boolean st = false;
 			for (StorageVolume volume : volumes) {
-				if (volume.getPath().equals("/mnt/extsd")
+				if (volume.getPath().equals("/mnt/sdcard")
 						&& mStorageManager.getVolumeState(volume.getPath())
 								.equals("mounted")) {
 					st = true;

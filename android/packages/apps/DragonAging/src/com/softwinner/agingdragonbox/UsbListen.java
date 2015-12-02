@@ -12,7 +12,7 @@ import android.content.ComponentName;
 import java.io.File;
 public class UsbListen extends BroadcastReceiver {    
 	private BroadcastReceiver mReceiver;
-	String extsd_path = new String("/mnt/extsd/DragonBox/");
+	String extsd_path = new String("/mnt/sdcard/DragonBox/");
     String usbhost0_path = new String("/mnt/usbhost0/DragonBox/custom_aging_cases.xml");
 	String usbhost1_path = new String("/mnt/usbhost1/DragonBox/custom_aging_cases.xml");
 	String usbhost2_path = new String("/mnt/usbhost2/DragonBox/custom_aging_cases.xml");

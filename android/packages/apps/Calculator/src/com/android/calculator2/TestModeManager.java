@@ -5,17 +5,32 @@ import java.io.File;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
+import android.util.Log;
+
 
 public class TestModeManager {
+
+	private static final String TAG = "TestModeManager";
 	
 	public static boolean start(Context context, String inputKey) {
-		if(inputKey.equals(TEST_MODE_KEY) || inputKey.equals(TEST_MODE_CONFIG)) {
+		if(inputKey.equals(TEST_MODE_KEY) || inputKey.equals(TEST_MODE_CONFIG) || inputKey.equals(TEST_AGING_KEY) ||
+					inputKey.equals(TEST_AGING_CONFIG) || inputKey.equals(TEST_DBOX_KEY) || inputKey.equals(TEST_DBOX_CONFIG)) {
 			boolean isStart = checkAndStart(context, inputKey);
 			boolean isStartConfig = checkAndStartConfig(context, inputKey);
-			if(isStart || isStartConfig) {
+			boolean isStartAging = checkAndStartAging(context, inputKey);
+			boolean isStratAgingConfig = checkAndStartAgingConfig(context, inputKey);
+			boolean isStartDbox = checkAndStartDbox(context, inputKey);
+			boolean isStartDboxConfig = checkAndStartDboxConfig(context, inputKey);
+
+			Log.v(TAG, "isStart=" + isStart + "isStartConfig=" + isStartConfig + "isStartAging=" + isStartAging +
+				       "isStratAgingConfig=" + isStratAgingConfig + "isStartDbox=" + isStartDbox + "isStartDboxConfig=" +
+				       isStartDboxConfig);
+			
+			if(isStart || isStartConfig || isStartAging || isStratAgingConfig || isStartDbox || isStartDboxConfig) {
 				return true;
 			}
 		}
+		
 		return false;
 	}
 
@@ -54,6 +69,83 @@ public class TestModeManager {
 		return b;
 	}
 
+	private static boolean checkAndStartAging(Context context, String inputKey) {
+		boolean b = false;
+		if (inputKey.equals(TEST_AGING_KEY) && (new File(FLAG_AGING_USBHOST).exists() || new File(FLAG_AGING_EXTSD).exists() || new File(FLAG_AGING_SDCARD).exists())) {
+			Intent i = new Intent();
+			ComponentName component = new ComponentName(
+					"com.softwinner.agingdragonbox",
+					"com.softwinner.agingdragonbox.Main");
+			i.setComponent(component);
+			try {
+				context.startActivity(i);
+				b = true;
+			} catch (Exception e) {
+			}
+		}
+		return b;
+	}
+
+	private static boolean checkAndStartAgingConfig(Context context, String inputKey) {
+		boolean b = false;
+		if (inputKey.equals(TEST_AGING_CONFIG) && (new File(FLAG_AGING_USBHOST_CONFIG).exists() || new File(FLAG_AGING_EXTSD_CONFIG).exists()
+				|| new File(FLAG_AGING_SDCARD_CONFIG).exists())) {
+			Intent i = new Intent();
+			ComponentName component = new ComponentName(
+					"com.softwinner.agingdragonbox",
+					"com.softwinner.agingdragonbox.Configuration");
+			i.setComponent(component);
+			try {
+				context.startActivity(i);
+				b = true;
+			} catch (Exception e) {
+			}
+		}
+		return b;
+	}
+
+	private static boolean checkAndStartDbox(Context context, String inputKey) {
+		boolean b = false;
+		if (inputKey.equals(TEST_DBOX_KEY) && (new File(FLAG_DBOX_USBHOST).exists() || 
+				new File(FLAG_DBOX_EXTSD).exists() || new File(FLAG_DBOX_SDCARD).exists())) {
+
+			Log.d(TAG, "checkAndStartDbox()");
+			
+			Intent i = new Intent();
+			ComponentName component = new ComponentName(
+					"com.softwinner.dragonbox",
+					"com.softwinner.dragonbox.Main");
+			i.setComponent(component);
+			try {
+				context.startActivity(i);
+				b = true;
+			} catch (Exception e) {
+			}
+		}
+		return b;
+	}
+
+	private static boolean checkAndStartDboxConfig(Context context, String inputKey) {
+		boolean b = false;
+		if (inputKey.equals(TEST_DBOX_CONFIG) && (new File(FLAG_DBOX_USBHOST_CONFIG).exists() || 
+				new File(FLAG_DBOX_EXTSD_CONFIG).exists() || new File(FLAG_DBOX_SDCARD_CONFIG).exists())) {
+
+			Log.d(TAG, "checkAndStartDboxConfig()");
+
+			Intent i = new Intent();
+			ComponentName component = new ComponentName(
+					"com.softwinner.dragonbox",
+					"com.softwinner.dragonbox.Configuration");
+			i.setComponent(component);
+			try {
+				context.startActivity(i);
+				b = true;
+			} catch (Exception e) {
+			}
+		}
+		return b;
+	}
+
 	public final static String TEST_MODE_KEY = "33"; // check if input value =
 														// dragonFireKey,
 														// startup DragongFire
@@ -62,11 +154,42 @@ public class TestModeManager {
 														// startup DragonFire
 														// configuration
 														// Activity.
+	public final static String TEST_AGING_KEY = "34"; // if input value = 34,
+														// startup DragonAging
+														// Main Activity
+    public final static String TEST_AGING_CONFIG = "24"; // if input value = 34,
+														// startup DragonAging
+														// configuration
+														// Activity.
+	public final static String TEST_DBOX_KEY = "35"; // if input value = 35,
+														// startup DragonBox
+														// Main Activity
+    public final static String TEST_DBOX_CONFIG = "25"; // if input value = 34,
+														// startup DragonAging
+														// configuration
+														// Activity.
+	/* flag for DragonFire */
 	private final static String FLAG_USBHOST = "/mnt/usbhost1/DragonFire/custom_cases.xml";
 	private final static String FLAG_USBHOST_CONFIG = "/mnt/usbhost1/DragonFire/";
-	private final static String FLAG_EXTSD = "/mnt/extsd/DragonFire/custom_cases.xml";
-	private final static String FLAG_EXTSD_CONFIG = "/mnt/extsd/DragonFire/";
+	private final static String FLAG_EXTSD = "/mnt/sdcard/DragonFire/custom_cases.xml";
+	private final static String FLAG_EXTSD_CONFIG = "/mnt/sdcard/DragonFire/";
 	private final static String FLAG_SDCARD = "/mnt/sdcard/DragonFire/custom_cases.xml";
 	private final static String FLAG_SDCARD_CONFIG = "/mnt/sdcard/DragonFire/";
+
+    /* flag for DragonAging */
+	private final static String FLAG_AGING_USBHOST = "/mnt/usbhost2/DragonBox/custom_aging_cases.xml";
+	private final static String FLAG_AGING_USBHOST_CONFIG = "/mnt/usbhost2/DragonBox/";
+	private final static String FLAG_AGING_EXTSD = "/mnt/sdcard/DragonBox/custom_aging_cases.xml";
+	private final static String FLAG_AGING_EXTSD_CONFIG = "/mnt/sdcard/DragonBox/";
+	private final static String FLAG_AGING_SDCARD = "/mnt/sdcard/DragonBox/custom_aging_cases.xml";
+	private final static String FLAG_AGING_SDCARD_CONFIG = "/mnt/sdcard/DragonBox/";
+
+	/* flag for DragonBox */
+	private final static String FLAG_DBOX_USBHOST = "/mnt/usbhost1/DragonBox/custom_cases.xml";
+	private final static String FLAG_DBOX_USBHOST_CONFIG = "/mnt/usbhost1/DragonBox/";
+	private final static String FLAG_DBOX_EXTSD = "/mnt/sdcard/DragonBox/custom_cases.xml";
+	private final static String FLAG_DBOX_EXTSD_CONFIG = "/mnt/sdcard/DragonBox/";
+	private final static String FLAG_DBOX_SDCARD = "/mnt/sdcard/DragonBox/custom_cases.xml";
+	private final static String FLAG_DBOX_SDCARD_CONFIG = "/mnt/sdcard/DragonBox/";
 }
 

@@ -16,7 +16,7 @@ public class UsbListen extends BroadcastReceiver {
 	private BroadcastReceiver mReceiver;
         private static final String TAG = "UsbListen";
 	String extsd_path = new String(
-	        "/mnt/extsd/DragonBox/custom_cases.xml");
+	        "/mnt/sdcard/DragonBox/custom_cases.xml");
 	String usbhost0_path = new String(
 			"/mnt/usbhost0/DragonBox/custom_cases.xml");
 	String usbhost1_path = new String(
@@ -27,7 +27,7 @@ public class UsbListen extends BroadcastReceiver {
 			"/mnt/usbhost3/DragonBox/custom_cases.xml");
 
 	String aging_extsd_path = new String(
-			"/mnt/extsd/DragonBox/custom_aging_cases.xml");
+			"/mnt/sdcard/DragonBox/custom_aging_cases.xml");
 	String aging_usbhost0_path = new String(
 			"/mnt/usbhost0/DragonBox/custom_aging_cases.xml");
 	String aging_usbhost1_path = new String(
@@ -38,7 +38,7 @@ public class UsbListen extends BroadcastReceiver {
 			"/mnt/usbhost3/DragonBox/custom_aging_cases.xml");
 
     String extsd_sn_path = new String(
-	       "/mnt/extsd/DragonBox/custom_sn_cases.xml");
+	       "/mnt/sdcard/DragonBox/custom_sn_cases.xml");
     String usbhost0_sn_path = new String(
 	       "/mnt/usbhost0/DragonBox/custom_sn_cases.xml");
 	String usbhost1_sn_path = new String(
@@ -49,7 +49,7 @@ public class UsbListen extends BroadcastReceiver {
 	       "/mnt/usbhost3/DragonBox/custom_sn_cases.xml");
 		   
 	String extsd_proof_path = new String(
-	       "/mnt/extsd/DragonBox/custom_proof_cases.xml");
+	       "/mnt/sdcard/DragonBox/custom_proof_cases.xml");
     String usbhost0_proof_path = new String(
 	       "/mnt/usbhost0/DragonBox/custom_proof_cases.xml");
 	String usbhost1_proof_path = new String(
