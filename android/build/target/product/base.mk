@@ -86,9 +86,7 @@ PRODUCT_PACKAGES += \
     libnetutils \
     libpixelflinger \
     libpower \
-    libreference-ril \
     libreverbwrapper \
-    libril \
     librtp_jni \
     libsensorservice \
     libskia \
@@ -147,3 +145,6 @@ PRODUCT_PACKAGES += \
     vdc \
     vold
 
+    # bpi, sim7100c use prebuild libs
+    #libril \
+    #libreference-ril \

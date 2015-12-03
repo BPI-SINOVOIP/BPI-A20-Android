@@ -2,6 +2,9 @@
 #
 # not currently building V8 for x86 targets
 
+# bpi, prebuild lib used if have simcom modem
+ifneq ($(TARGET_SIMCOM_USED),true)
+
 LOCAL_PATH:= $(call my-dir)
 
 # Directories of source files
@@ -84,3 +87,5 @@ src_java :=
 src_py :=
 src_js :=
 src_proto :=
+
+endif

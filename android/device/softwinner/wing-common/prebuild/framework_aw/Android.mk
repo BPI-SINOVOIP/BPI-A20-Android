@@ -166,3 +166,15 @@ LOCAL_SRC_FILES := libjni_fireair.so
 LOCAL_MODULE_CLASS := lib
 include $(BUILD_PREBUILT)
 
+#######################
+
+#######################
+include $(CLEAR_VARS)
+LOCAL_MODULE := DragonFire.apk
+LOCAL_MODULE_TAGS := optional
+LOCAL_CERTIFICATE := PRESIGNED
+LOCAL_MODULE_CLASS := APPS
+LOCAL_SRC_FILES := $(LOCAL_MODULE)
+include $(BUILD_PREBUILT)
+
+#######################

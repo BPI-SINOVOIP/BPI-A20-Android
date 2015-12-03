@@ -49,7 +49,8 @@ PRODUCT_PROPERTY_OVERRIDES += \
 PRODUCT_PACKAGES += \
 	DragonAging \
 	DragonBox \
-	DragonSN
+	DragonSN \
+	DragonFire.apk
 
 #install TVQQ Plugin to /system/lib/qq
 PRODUCT_PACKAGES +=  \

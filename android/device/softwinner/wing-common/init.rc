@@ -213,6 +213,12 @@ on post-fs-data
     chown radio system /system/etc/ppp/ip-up
     chown radio system /system/etc/ppp/ip-down
 
+    # bpi, sim7100c used
+    chmod 0751 /system/etc/init.gprs-pppd
+    chmod 0751 /system/etc/3gdata_call.conf
+    chown radio system /system/etc/init.gprs-pppd
+    chown radio system /system/etc/3gdata_call.conf
+
     # For security reasons, /data/local/tmp should always be empty.
     # Do not place files or directories in /data/local/tmp
     mkdir /data/local/tmp 0771 shell shell
@@ -442,12 +448,23 @@ service netd /system/bin/netd
 service debuggerd /system/bin/debuggerd
     class main
 
-service ril-daemon /system/bin/rild
+# bpi, modified for simcom
+#service ril-daemon /system/bin/rild
+service ril-daemon /system/bin/rild -l /system/lib/libreference-ril.so
     class main
     socket rild stream 660 root radio
     socket rild-debug stream 660 radio system
+    socket rild-gps stream 660 radio system
     user root
     group radio cache inet misc audio sdcard_rw log
+
+service pppd_gprs /etc/init.gprs-pppd
+    user root
+    group radio cache inet misc
+    disabled
+    oneshot
+
+# bpi, end
 
 service surfaceflinger /system/bin/surfaceflinger
     class main

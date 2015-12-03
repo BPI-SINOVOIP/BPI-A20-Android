@@ -28,6 +28,7 @@ SW_BOARD_IR_RECOVERY := true
 
 # bpi, simcom lte used
 TARGET_SIMCOM_USED := true
+#SW_BOARD_HAVE_3G := true
 
 # wifi and bt configuration
 

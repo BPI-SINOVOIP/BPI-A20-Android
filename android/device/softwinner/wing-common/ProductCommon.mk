@@ -15,6 +15,8 @@ PRODUCT_PACKAGES += \
 PRODUCT_PACKAGES += \
 	audio.primary.exDroid \
 	audio.a2dp.default \
+	libril_audio \
+	libcodec_audio \
 	libaudioutils \
 	libcedarxbase \
 	libcedarxosal \
@@ -126,15 +128,15 @@ PRODUCT_PROPERTY_OVERRIDES += \
 	ro.display.switch=1 \
 	ro.opengles.version=131072 \
 	rild.libargs=-d/dev/ttyUSB2 \
-	rild.libpath=/system/lib/libsoftwinner-ril.so \
-	ro.telephony.default_network=9 \
+	rild.libpath=/system/lib/libreference-ril.so \
+	ro.telephony.default_network=9\
 	keyguard.no_require_sim=true \
 	persist.sys.strictmode.visual=0 \
 	persist.sys.strictmode.disable=1 \
 	hwui.render_dirty_regions=false \
+	ro.sw.embeded.telephony=true \
+        audio.without.earpiece=true \
 	#ro.adb.secure=1 \
-	#ro.sw.embeded.telephony=true \
-        #audio.without.earpiece=true \
 
 	
 PRODUCT_PACKAGES += \

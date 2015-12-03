@@ -1,0 +1,31 @@
+#!/system/bin/sh
+# An unforunate wrapper script 
+# so that the exit code of pppd may be retrieved
+
+
+# this is a workaround for issue #651747
+#trap "/system/bin/sleep 1;exit 0" TERM
+
+
+PPPD_PID=
+PPPD_USERNAME=`/system/bin/getprop ril.pppd.username`
+PPPD_PASSWORD=`/system/bin/getprop ril.pppd.password`
+PPPD_DATAPORT=`/system/bin/getprop ril.pppd.dataport`
+#PPPD_AUTHTYPE=`/system/bin/getprop ril.pppd.authtype`
+
+/system/bin/setprop "net.gprs.ppp-exit" ""
+
+/system/bin/log -t pppd "Starting pppd"
+/system/bin/log -t pppd "username:$PPPD_USERNAME"
+
+
+#/system/xbin/pppd $*
+# pppd was put into /system/bin instead of /system/xbin after SDK1.6
+/system/bin/pppd user $PPPD_USERNAME password $PPPD_PASSWORD connect 'chat -v -s -r "/var/log/chat.log" -f "/etc/3gdata_call.conf"' disconnect 'chat -r "/var/log/chat.log" -t 30 -e -v "" +++ATH "NO CARRIER"' $PPPD_DATAPORT 115200 mru 1280 mtu 1280 nodetach debug dump defaultroute usepeerdns novj novjccomp noipdefault ipcp-accept-local ipcp-accept-remote connect-delay 5000 linkname ppp0
+
+PPPD_EXIT=$?
+PPPD_PID=$!
+
+/system/bin/log -t pppd "pppd exited with $PPPD_EXIT"
+
+/system/bin/setprop "net.gprs.ppp-exit" "$PPPD_EXIT"

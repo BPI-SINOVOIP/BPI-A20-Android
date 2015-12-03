@@ -19,6 +19,8 @@
 
 PRODUCT_PACKAGES := \
     Mms \
-    rild
+
+# bpi, sim7100c use prebuild libs
+#    rild
 
 PRODUCT_COPY_FILES := \

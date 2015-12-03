@@ -3,7 +3,7 @@
 LOCAL_PATH:= $(call my-dir)
 
 # bpi, prebuild lib used if have simcom modem
-ifeq ($(TARGET_SIMCOM_USED),true)
+ifneq ($(TARGET_SIMCOM_USED),true)
 
 include $(CLEAR_VARS)
 
