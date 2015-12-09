@@ -459,10 +459,6 @@ public class Settings extends PreferenceActivity
                 if (!showDev) {
                     target.remove(i);
                 }
-            } else if (id == R.id.battery_settings) {
-                /* modify by huanglong 20130314 */
-                /* On Homlet & dongle , has not battery */
-                target.remove(i);
             }
 
             if (target.get(i) == header

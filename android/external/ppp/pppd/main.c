@@ -1668,6 +1668,8 @@ run_program(prog, args, must_exist, done, arg)
     int pid;
     struct stat sbuf;
 
+	error("run_program(%s)", prog);
+
 #ifdef ANDROID_CHANGES
     /* Originally linkname is used to create named pid files, which is
     * meaningless to android. Here we use it as a suffix of program names,
@@ -1683,6 +1685,8 @@ run_program(prog, args, must_exist, done, arg)
     }
 #endif
 
+	error("run_program(), prog=file=%s", prog);
+
     /*
      * First check if the file exists and is executable.
      * We don't use access() because that would use the
@@ -1693,20 +1697,23 @@ run_program(prog, args, must_exist, done, arg)
     if (stat(prog, &sbuf) < 0 || !S_ISREG(sbuf.st_mode)
 	|| (sbuf.st_mode & (S_IXUSR|S_IXGRP|S_IXOTH)) == 0) {
 	if (must_exist || errno != ENOENT)
-	    warn("Can't execute %s: %m", prog);
+	    error("Can't execute %s: %m", prog);
 	return 0;
     }
 
     pid = safe_fork(fd_devnull, fd_devnull, fd_devnull);
+	error("run_program(), pid = %d", pid);
+	
     if (pid == -1) {
-	error("Failed to create child process for %s: %m", prog);
-	return -1;
+		error("Failed to create child process for %s: %m", prog);
+		return -1;
     }
+	
     if (pid != 0) {
-	if (debug)
-	    dbglog("Script %s started (pid %d)", prog, pid);
-	record_child(pid, prog, done, arg);
-	return pid;
+		//if (debug)
+	    	error("Script %s started (pid %d)", prog, pid);
+		record_child(pid, prog, done, arg);
+		return pid;
     }
 
     /* Leave the current location */
@@ -1719,7 +1726,7 @@ run_program(prog, args, must_exist, done, arg)
 #ifdef BSD
     /* Force the priority back to zero if pppd is running higher. */
     if (setpriority (PRIO_PROCESS, 0, 0) < 0)
-	warn("can't reset priority to 0: %m");
+	error("can't reset priority to 0: %m");
 #endif
 
     /* run the program */
@@ -1730,6 +1737,7 @@ run_program(prog, args, must_exist, done, arg)
 	   for the message to go. */
 	reopen_log();
 	syslog(LOG_ERR, "Can't execute %s: %m", prog);
+	error("Can't execute %s: %m", prog);
 	closelog();
 #else
 	error("Can't execute %s: %m", prog);
@@ -1756,7 +1764,7 @@ record_child(pid, prog, done, arg)
 
     chp = (struct subprocess *) malloc(sizeof(struct subprocess));
     if (chp == NULL) {
-	warn("losing track of %s process", prog);
+	error("losing track of %s process", prog);
     } else {
 	chp->pid = pid;
 	chp->prog = prog;

@@ -34,6 +34,7 @@ import android.provider.Settings;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Switch;
+import android.util.Log;
 
 import com.android.internal.telephony.TelephonyIntents;
 import com.android.internal.telephony.TelephonyProperties;
@@ -41,6 +42,7 @@ import com.android.settings.nfc.NfcEnabler;
 import com.android.settings.NsdEnabler;
 
 public class WirelessSettings extends SettingsPreferenceFragment {
+	private static final String TAG = "WirelessSettings";
 
     private static final String KEY_TOGGLE_AIRPLANE = "toggle_airplane";
     private static final String KEY_TOGGLE_NFC = "toggle_nfc";
@@ -157,9 +159,9 @@ public class WirelessSettings extends SettingsPreferenceFragment {
         }
 
         // Remove Mobile Network Settings if it's a wifi-only device.
-        //if (isSecondaryUser || Utils.isWifiOnly(getActivity())) {
-        //    removePreference(KEY_MOBILE_NETWORK_SETTINGS);
-        //}
+        if (isSecondaryUser || Utils.isWifiOnly(getActivity())) {
+            removePreference(KEY_MOBILE_NETWORK_SETTINGS);
+        }
 
         // Enable Proxy selector settings if allowed.
         Preference mGlobalProxy = findPreference(KEY_PROXY_SETTINGS);

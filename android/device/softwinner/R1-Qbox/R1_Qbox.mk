@@ -53,22 +53,10 @@ PRODUCT_COPY_FILES += \
 
 # bpi, simcom prebuild libs
 PRODUCT_PACKAGES += \
-	libreference-ril.so \
-	librilutils.so \
-	libril.so \
-	rild \
+	librilutils \
 	radiooptions \
 	init.gprs-pppd \
-	3gdata_call.conf
-
-#PRODUCT_COPY_FILES += \
-#	device/softwinner/R1-Qbox/hardware/ril/3gdata_call.conf:system/etc/3gdata_call.conf \
-#	device/softwinner/R1-Qbox/hardware/ril/init.gprs-pppd:system/etc/init.gprs-pppd \
-#	device/softwinner/R1-Qbox/hardware/ril/radiooptions:system/bin/radiooptions \
-#	device/softwinner/R1-Qbox/hardware/ril/rild:system/bin/rild \
-#	device/softwinner/R1-Qbox/hardware/ril/libril.so:system/lib/libril.so \
-#	device/softwinner/R1-Qbox/hardware/ril/librilutils.so:system/lib/librilutils.so \
-#	device/softwinner/R1-Qbox/hardware/ril/libreference-ril.so:system/lib/libreference-ril.so
+	3gdata_call.conf 
 
 # rtl8723as bt fw and config
 #PRODUCT_COPY_FILES += \

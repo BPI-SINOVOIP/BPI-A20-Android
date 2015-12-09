@@ -179,7 +179,6 @@ public class Status extends PreferenceActivity {
     @Override
     protected void onCreate(Bundle icicle) {
         super.onCreate(icicle);
-        Preference removablePref;
 
         mHandler = new MyHandler(this);
 

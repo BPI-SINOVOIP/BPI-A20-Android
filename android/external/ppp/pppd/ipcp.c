@@ -1840,6 +1840,9 @@ ipcp_up(f)
     if (ip_up_hook)
 	ip_up_hook();
 
+	notice("ipcp_script_state = %d", ipcp_script_state);
+	notice("ipcp_script_pid = %d", ipcp_script_pid);
+
     /*
      * Execute the ip-up script, like this:
      *	/etc/ppp/ip-up interface tty speed local-IP remote-IP
@@ -1986,6 +1989,11 @@ ipcp_script(script)
     argv[5] = strremote;
     argv[6] = ipparam;
     argv[7] = NULL;
+
+	error("script = %s", script);
+	error("ifname = %s", ifname);
+	error("devnam = %s", devnam);
+	
     ipcp_script_pid = run_program(script, argv, 0, ipcp_script_done, NULL);
 }
 

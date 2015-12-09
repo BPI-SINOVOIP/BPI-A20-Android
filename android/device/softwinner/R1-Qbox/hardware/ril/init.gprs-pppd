@@ -21,7 +21,7 @@ PPPD_DATAPORT=`/system/bin/getprop ril.pppd.dataport`
 
 #/system/xbin/pppd $*
 # pppd was put into /system/bin instead of /system/xbin after SDK1.6
-/system/bin/pppd user $PPPD_USERNAME password $PPPD_PASSWORD connect 'chat -v -s -r "/var/log/chat.log" -f "/etc/3gdata_call.conf"' disconnect 'chat -r "/var/log/chat.log" -t 30 -e -v "" +++ATH "NO CARRIER"' $PPPD_DATAPORT 115200 mru 1280 mtu 1280 nodetach debug dump defaultroute usepeerdns novj novjccomp noipdefault ipcp-accept-local ipcp-accept-remote connect-delay 5000 linkname ppp0
+/system/bin/pppd user $PPPD_USERNAME password $PPPD_PASSWORD connect 'chat -v -s -r "/var/log/chat.log" -f "/etc/3gdata_call.conf"' disconnect 'chat -r "/var/log/chat.log" -t 30 -e -v "" +++ATH "NO CARRIER"' $PPPD_DATAPORT 115200 mru 1280 mtu 1280 nodetach debug dump defaultroute usepeerdns novj novjccomp noipdefault ipcp-accept-local ipcp-accept-remote connect-delay 5000
 
 PPPD_EXIT=$?
 PPPD_PID=$!

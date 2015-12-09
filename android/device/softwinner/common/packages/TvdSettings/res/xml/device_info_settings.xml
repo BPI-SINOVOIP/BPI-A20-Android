@@ -33,7 +33,6 @@
         </PreferenceScreen>
 
         <!-- Device status - launches activity -->
-        <!-- Remove this on homlet and dongle by default
         <PreferenceScreen android:key="status_info"
                 android:title="@string/device_status" 
                 android:summary="@string/device_status_summary">
@@ -41,7 +40,6 @@
                     android:targetPackage="com.android.settings"
                     android:targetClass="com.android.settings.deviceinfo.Status" />
         </PreferenceScreen>
-        -->
 
         <!-- Legal Information -->
         <PreferenceScreen

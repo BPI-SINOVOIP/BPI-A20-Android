@@ -157,11 +157,10 @@ public class WirelessSettings extends SettingsPreferenceFragment {
         }
 
         // Remove Mobile Network Settings if it's a wifi-only device.
-        //if (isSecondaryUser || Utils.isWifiOnly(getActivity())) {
+        if (isSecondaryUser || Utils.isWifiOnly(getActivity())) {
             removePreference(KEY_MOBILE_NETWORK_SETTINGS);
-        //}
+        }
 
-        removePreference(KEY_TOGGLE_AIRPLANE);
         // Enable Proxy selector settings if allowed.
         Preference mGlobalProxy = findPreference(KEY_PROXY_SETTINGS);
         DevicePolicyManager mDPM = (DevicePolicyManager)

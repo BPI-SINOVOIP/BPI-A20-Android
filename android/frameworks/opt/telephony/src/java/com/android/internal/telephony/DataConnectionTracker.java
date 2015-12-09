@@ -1303,7 +1303,7 @@ public abstract class DataConnectionTracker extends Handler {
         TxRxSum preTxRxSum = new TxRxSum(mDataStallTxRxSum);
         mDataStallTxRxSum.updateTxRxSum();
 
-        if (VDBG) {
+        if (DBG) {
             log("updateDataStallInfo: mDataStallTxRxSum=" + mDataStallTxRxSum +
                     " preTxRxSum=" + preTxRxSum);
         }
@@ -1318,7 +1318,7 @@ public abstract class DataConnectionTracker extends Handler {
             }
         }
         if ( sent > 0 && received > 0 ) {
-            if (VDBG) log("updateDataStallInfo: IN/OUT");
+            if (DBG) log("updateDataStallInfo: IN/OUT");
             mSentSinceLastRecv = 0;
             putRecoveryAction(RecoveryAction.GET_DATA_CALL_LIST);
         } else if (sent > 0 && received == 0) {
@@ -1332,11 +1332,11 @@ public abstract class DataConnectionTracker extends Handler {
                         " mSentSinceLastRecv=" + mSentSinceLastRecv);
             }
         } else if (sent == 0 && received > 0) {
-            if (VDBG) log("updateDataStallInfo: IN");
+            if (DBG) log("updateDataStallInfo: IN");
             mSentSinceLastRecv = 0;
             putRecoveryAction(RecoveryAction.GET_DATA_CALL_LIST);
         } else {
-            if (VDBG) log("updateDataStallInfo: NONE");
+            if (DBG) log("updateDataStallInfo: NONE");
         }
     }
 
@@ -1361,7 +1361,7 @@ public abstract class DataConnectionTracker extends Handler {
             suspectedStall = DATA_STALL_SUSPECTED;
             sendMessage(obtainMessage(DctConstants.EVENT_DO_RECOVERY));
         } else {
-            if (VDBG) {
+            if (DBG) {
                 log("onDataStallAlarm: tag=" + tag + " Sent " + String.valueOf(mSentSinceLastRecv) +
                     " pkts since last received, < watchdogTrigger=" + hangWatchdogTrigger);
             }
@@ -1397,8 +1397,12 @@ public abstract class DataConnectionTracker extends Handler {
         intent.putExtra(DATA_STALL_ALARM_TAG_EXTRA, mDataStallAlarmTag);
         mDataStallAlarmIntent = PendingIntent.getBroadcast(mPhone.getContext(), 0, intent,
                 PendingIntent.FLAG_UPDATE_CURRENT);
+
+		loge("BPI, Android not support data stall alarm");
+		/* bpi, Android 4.2.2 not support data stall alarm 
         am.set(AlarmManager.ELAPSED_REALTIME_WAKEUP,
                 SystemClock.elapsedRealtime() + delayInMs, mDataStallAlarmIntent);
+        */
     }
 
     protected void stopDataStallAlarm() {
