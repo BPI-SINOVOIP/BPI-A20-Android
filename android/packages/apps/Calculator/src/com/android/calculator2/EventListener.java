@@ -47,10 +47,11 @@ class EventListener implements View.OnKeyListener,
         case R.id.equal:
             mHandler.onEnter();
             break;
-			case R.id.plus:
-		//when sd card exist "custom_cases.xml", open test mode, check if Calculator's display TEST_MODE_KEY, then startup DragonFire application.
-		String str = mHandler.getText();
-		if(TestModeManager.start(view.getContext(), str)) {
+
+		case R.id.plus:
+			//when sd card exist "custom_cases.xml", open test mode, check if Calculator's display TEST_MODE_KEY, then startup DragonFire application.
+			String str = mHandler.getText();
+			if(TestModeManager.start(view.getContext(), str)) {
 				mHandler.onClear();
 				break;
 		}

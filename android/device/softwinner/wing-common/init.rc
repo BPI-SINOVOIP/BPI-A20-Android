@@ -645,14 +645,14 @@ service pppoe_close /system/bin/pppoe-disconnect
 
 # Description: for sop
 # Date: 2013-5-29
-on property:sys.audiopatch.exist=true
-    start sop
-	
-service sop /system/bin/busybox sh /system/bin/sop.sh
-    user root
-    group root	
-    disabled
-    oneshot
+#on property:sys.audiopatch.exist=true
+#    start sop
+#	
+#service sop /system/bin/busybox sh /system/bin/sop.sh
+#    user root
+#    group root	
+#    disabled
+#    oneshot
 
 # start system mix service
 service property /system/bin/systemmixservice
@@ -661,3 +661,40 @@ service property /system/bin/systemmixservice
 	group root audio camera graphics inet net_bt net_bt_admin net_raw
 	ioprio rt 4
 	oneshot
+
+# bpi, log service for debugging
+on property:persist.sys.log_kernel=true
+	start log_kernel
+
+on property:persist.sys.log_kernel=false
+        stop log_kernel
+
+on property:persist.sys.log_main=true
+	start log_main
+
+on property:persist.sys.log_main=false
+        stop log_main
+
+on property:persist.sys.log_radio=true
+	start log_radio
+
+on property:persist.sys.log_radio=false
+        stop log_radio
+
+service log_kernel /system/bin/logger.sh kernel
+        user root
+        group root
+        disabled
+        oneshot
+
+service log_main  /system/bin/logger.sh android
+        user root
+        group root
+        disabled
+        oneshot
+
+service log_radio /system/bin/logger.sh radio
+        user root
+        group root
+        disabled
+        oneshot

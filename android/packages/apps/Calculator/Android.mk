@@ -23,9 +23,13 @@ LOCAL_STATIC_JAVA_LIBRARIES := libarity android-support-v4 guava
 
 LOCAL_SRC_FILES := $(call all-java-files-under, src)
 
-LOCAL_SDK_VERSION := current
+# bpi, comment for using hide class
+#LOCAL_SDK_VERSION := current
 
 LOCAL_PACKAGE_NAME := Calculator
+
+# bpi, add for app system permission signature 
+LOCAL_CERTIFICATE := platform
 
 include $(BUILD_PACKAGE)
 ##################################################
