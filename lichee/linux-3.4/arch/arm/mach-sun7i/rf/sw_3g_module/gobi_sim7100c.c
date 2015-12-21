@@ -122,6 +122,7 @@ void sim7100c_power(struct sw_modem *modem, u32 on)
 
     if(on){
     	/* power on */
+#if 0
 		modem_reset(modem, 1);
 		msleep(100);
 		modem_reset(modem, 0);
@@ -132,8 +133,16 @@ void sim7100c_power(struct sw_modem *modem, u32 on)
 		modem_vbat(modem, 1);
 		mdelay(5000);
         modem_power_on_off(modem, 1);
+#else
+		modem_vbat(modem, 1);           //bpi, v1.1 LTE-RESET
+		msleep(100);					
+		modem_power_on_off(modem, 1);	//bpi, v1.1 LTE-POWER
+		mdelay(5000);
+		modem_reset(modem, 1);   		//bpi, v1.1 LTE-VBUS-ON
+#endif
     }else{
 		/* power off */
+		modem_reset(modem, 0);
         modem_power_on_off(modem, 0);
 		modem_vbat(modem, 0);
     }

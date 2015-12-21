@@ -613,11 +613,11 @@ public class PhoneWindowManager implements WindowManagerPolicy {
     private Handler mFlickerHandler = new Handler();
     private boolean mFlickerEnable  = true;
     private static final int FLICKER_INTERVAL = 30;
-    private static final char portType = 'i';
-    private static final int portNum = 16;
+    private static final char portType = 'H';
+    private static final int portNum = 8;
     private static final int func = 1;
-    private static final int on = 0;
-    private static final int off = 1;
+    private static final int on = 1;
+    private static final int off = 0;
     private BroadcastReceiver mFlickerIntentReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
