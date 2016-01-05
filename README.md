@@ -1,4 +1,4 @@
-#BPI A20 Android 4.2.2 Source code
+ A20 Android 4.2.2 Source code
 
 ----------
 
@@ -31,15 +31,35 @@ gnu/libGL.so`
 
 ###**Build**
 
-Use following command to fast build::
+Run build.sh to select a target build.
 
-HDMI target build
+> $ build.sh
+> 
+> ================================
+>        BPI A20 Android Build
+> = ==============================
+> 
+> 
+> 1. BPI_M1_HDMI
+> 2. BPI_R1_HDMI
+> 3. BPI_M1Plus_HDMI
+> 4. BPI_M1_LCD
+> 5. BPI_R1_LCD
+> 6. BPI_M1Plus_LCD
+	
+> Please choose a target(1-6): 3
+> 
+> 1. userdebug
+> 2. eng
+> 3. user
+>
+>Please choose a variant(1-3): 2
+> 
+> TARGET_DEVICE=bpi_m1plus_hdmi VARIANT=eng
 
-`$ ./build_hdmi.sh`
 
-LCD target build
 
-`$ ./build_LCD.sh`
 
-For detail build process in *Build_Code_Command.txt*
+
+
 
