@@ -36,7 +36,9 @@ Run build.sh to select a target build.
 > $ build.sh
 > 
 > = ==============================
->        BPI A20 Android Build
+> 
+> BPI A20 Android Build
+> 
 > = ==============================
 > 
 > 
