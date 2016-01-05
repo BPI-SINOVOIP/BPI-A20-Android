@@ -284,41 +284,23 @@ static void axp_charger_update_state(struct axp_charger *charger)
 	uint16_t tmp;
 	axp_reads(charger->master,AXP20_CHARGE_STATUS,2,val);
 	tmp = (val[1] << 8 )+ val[0];
-	charger->is_on = (val[1] & AXP20_IN_CHARGE) ? 1 : 0;                    //charing status 1 or not charging(full) 0
-	charger->fault = val[1];												//
-	charger->bat_det = (tmp & AXP20_STATUS_BATEN)?1:0;						//baterry present 1 or not 0
-	charger->ac_det = (tmp & AXP20_STATUS_ACEN)?1:0;						//ac in 1 or not 0
-	charger->usb_det = (tmp & AXP20_STATUS_USBEN)?1:0;						//usb in 1 or not 0
-	charger->usb_valid = (tmp & AXP20_STATUS_USBVA)?1:0;					//vbus availd 1 or not 0
-	charger->ac_valid = (tmp & AXP20_STATUS_ACVA)?1:0;						//ac availd 1 or not 0
-	charger->ext_valid = charger->ac_valid | charger->usb_valid;			//external power supply enable
-	charger->bat_current_direction = (tmp & AXP20_STATUS_BATCURDIR)?1:0;    //current in 1 or out 0
-	charger->in_short = (tmp& AXP20_STATUS_ACUSBSH)?1:0;					//boot source ac/usb 1 or not 0
-	charger->batery_active = (tmp & AXP20_STATUS_BATINACT)?1:0;				//battery active state 1 or not 0
-	charger->low_charge_current = (tmp & AXP20_STATUS_CHACURLOEXP)?1:0;		//actual charging current < expect current 1, = 0
-	charger->int_over_temp = (tmp & AXP20_STATUS_ICTEMOV)?1:0;				//overheat 1 or not 0
-/*
-	printk("%s: AXP20_CHARGE_STATUS = %X\n", __func__, tmp);
-	printk("%s: charger->is_on = %d\n", __func__, charger->is_on);
-	printk("%s: charger->fault = %d\n", __func__, charger->fault);
-	printk("%s: charger->bat_det = %d\n", __func__, charger->bat_det);
-	printk("%s: charger->ac_det = %d\n", __func__, charger->ac_det);
-	printk("%s: charger->usb_det = %d\n", __func__, charger->usb_det);
-	printk("%s: charger->usb_valid = %d\n", __func__, charger->usb_valid);
-	printk("%s: charger->ac_valid = %d\n", __func__, charger->ac_valid);
-	printk("%s: charger->ext_valid = %d\n", __func__, charger->ext_valid);
-	printk("%s: charger->bat_current_direction = %d\n", __func__, charger->bat_current_direction);
-	printk("%s: charger->in_short = %d\n", __func__, charger->in_short);
-	printk("%s: charger->batery_active = %d\n", __func__, charger->batery_active);
-	printk("%s: charger->low_charge_current = %d\n", __func__, charger->low_charge_current);
-	printk("%s: charger->int_over_temp = %d\n", __func__, charger->int_over_temp);
-*/	
+	charger->is_on = (val[1] & AXP20_IN_CHARGE) ? 1 : 0;
+	charger->fault = val[1];
+	charger->bat_det = (tmp & AXP20_STATUS_BATEN)?1:0;
+	charger->ac_det = (tmp & AXP20_STATUS_ACEN)?1:0;
+	charger->usb_det = (tmp & AXP20_STATUS_USBEN)?1:0;
+	charger->usb_valid = (tmp & AXP20_STATUS_USBVA)?1:0;
+	charger->ac_valid = (tmp & AXP20_STATUS_ACVA)?1:0;
+	charger->ext_valid = charger->ac_valid | charger->usb_valid;
+	charger->bat_current_direction = (tmp & AXP20_STATUS_BATCURDIR)?1:0;
+	charger->in_short = (tmp& AXP20_STATUS_ACUSBSH)?1:0;
+	charger->batery_active = (tmp & AXP20_STATUS_BATINACT)?1:0;
+	charger->low_charge_current = (tmp & AXP20_STATUS_CHACURLOEXP)?1:0;
+	charger->int_over_temp = (tmp & AXP20_STATUS_ICTEMOV)?1:0;
+    
 	axp_read(charger->master,AXP20_CHARGE_CONTROL1,val);
-	charger->charge_on = ((val[0] >> 7) & 0x01);							//charging enable 1 or not 0
-/*
-	printk("%s: AXP20_CHARGE_CONTROL1 = %X\n", __func__, val[0]);
-	printk("%s: charger->charge_on = %d\n", __func__, charger->charge_on);
-*/
+	charger->charge_on = ((val[0] >> 7) & 0x01);
+
 }
 
 static void axp_charger_update(struct axp_charger *charger)
@@ -499,8 +481,8 @@ static int axp_battery_get_property(struct power_supply *psy,
 			val->intval = charger->battery_info->voltage_min_design;
 			break;
 		case POWER_SUPPLY_PROP_VOLTAGE_NOW:
-			val->intval = charger->ocv * 1000;
-			//val->intval = charger->vbat * 1000;
+			//val->intval = charger->ocv * 1000;
+			val->intval = charger->vbat * 1000;
 			break;
 		case POWER_SUPPLY_PROP_CURRENT_NOW:
 			val->intval = charger->ibat * 1000;
@@ -772,11 +754,7 @@ static int axp_battery_event(struct notifier_block *nb, unsigned long event,
 	w[7] = POWER20_INTSTS5;
 	w[8] = (uint8_t) ((event) & 0xFF);
 //	w[8] = (uint8_t) (((uint64_t) event >> 32) & 0xFF);
-
-	printk("%s: event = %X\n", __func__, event);
-
-	if((bool)data==0)
-	{
+	if((bool)data==0){
 		if(event & (AXP20_IRQ_BATIN|AXP20_IRQ_BATRE)) {
 			axp_capchange(charger);
 		}
@@ -1471,8 +1449,6 @@ static void axp_charging_monitor(struct work_struct *work)
 	uint8_t data_mm[12];
 	int mm;
 
-	DBG_PSY_MSG("----------------%s-------------\n", __func__);
-
 	charger = container_of(work, struct axp_charger, work.work);
 	axp_reads(charger->master,AXP20_IC_TYPE,2,v);
 	flag_notfristin	= (v[1]	>> 6) &	0x1;
@@ -1481,7 +1457,7 @@ static void axp_charging_monitor(struct work_struct *work)
 	axp_charger_update_state(charger);
 	axp_charger_update(charger);
 
-	if(charger->is_on && axp20_icharge_to_mA(charger->adc->ichar_res) > 200 && charger->ocv > 3500 && charger->disvbat != 0){
+	if(charger->is_on && axp20_icharge_to_mA(charger->adc->ichar_res) > 200 && charger->vbat > 3500 && charger->disvbat != 0){
 		if((((v[1] >> 7) == 0) || (((v[1] >> 3) & 0x1) == 0)) && count_rdc >= 3){
 			axp_set_bits(charger->master,AXP20_CAP,0x80);
 			axp_clr_bits(charger->master,0xBA,0x80);
@@ -1509,15 +1485,15 @@ static void axp_charging_monitor(struct work_struct *work)
 	if((charger->bat_det ==	0) || (rt_rest_vol == 127) ){
 		rt_rest_vol	= 100;
 	}
-	if(/*axp_debug*/1){
+	if(axp_debug){
 		DBG_PSY_MSG("rt_rest_vol = %d\n",rt_rest_vol);
 	}
 	
 	if(change_flag){
-		DBG_PSY_MSG("-in change_flag-\n");
+		DBG_PSY_MSG("-----------in change_flag-----------\n");
 		change_flag	= 0;
 		if(ABS(rt_rest_vol - charger->ocv_rest_vol)	> 5){
-			DBG_PSY_MSG("-correct	rdc-\n");
+			DBG_PSY_MSG("-----------correct	rdc-----------\n");
 			axp_clr_bits(charger->master,0x04,0x08);
 			//ssleep(1);
 			axp_read(charger->master, AXP20_CAP,&val);
@@ -1542,8 +1518,6 @@ static void axp_charging_monitor(struct work_struct *work)
 	charger->ocv_rest_vol =	rt_rest_vol;
 
 	Get_Rest_Cap(charger,&saved_cap);
-
-	DBG_PSY_MSG("flag_notfristin	= %d\n", flag_notfristin);
 		
 	if(	flag_notfristin	){
 		Cur_CoulombCounter = Get_Bat_Coulomb_Count(charger);
@@ -1596,7 +1570,7 @@ static void axp_charging_monitor(struct work_struct *work)
 		}
 
 		/*电池剩余容量校正，当其小于100，ocv大于4.1V，外部充电器在，放电电流为0,且未在充电时，电池剩余容量自加，直到100*/
-		if((charger->ocv >= 4150) && (charger->rest_vol < 100) && (charger->bat_current_direction == 0)	&& (charger->ext_valid)&&(charger->charge_on) && (!charger->disibat)) {
+		if((charger->vbat >= 4100) && (charger->rest_vol < 100) && (charger->bat_current_direction == 0)	&& (charger->ext_valid)&&(charger->charge_on) && (!charger->disibat)) {
 			if(cap_count2 >= TIMER5) {
 				DBG_PSY_MSG("Correct2:fix 100,charger->rest_vol = %d -> 100%%\n",charger->rest_vol);
 				charger->rest_vol ++;
@@ -1673,13 +1647,11 @@ static void axp_charging_monitor(struct work_struct *work)
 			saved_cap =	100	- 100 *	(Cur_CoulombCounter) / bat_cap;
 			Set_Rest_Cap(charger,saved_cap);
 		}
-	} 
-	else 
-	{
+	} else {
 		charger->rest_vol =	rt_rest_vol;
 		DBG_PSY_MSG("init charger->rest_vol = %d\n",charger->rest_vol);
 		/* full	*/
-		if(charger->ocv >=	4150 &&	!charger->is_on	&& charger->ext_valid &&(charger->charge_on)&&(!charger->disibat)) {
+		if(charger->vbat >=	4100 &&	!charger->is_on	&& charger->ext_valid &&(charger->charge_on)&&(!charger->disibat)) {
 			charger->rest_vol =	100;
 		}
 		/* charging*/
@@ -1732,8 +1704,7 @@ static void axp_charging_monitor(struct work_struct *work)
 		printk("\n ============Capacity	Calibration	Start============ \n");
 		printk("\n ============	  Rest	Capacity  =	 %d	 ============ \n",rt_rest_vol);
 	}
-	
-	if(/*axp_debug*/1){
+	if(axp_debug){
 		DBG_PSY_MSG("charger->ic_temp = %d\n",charger->ic_temp);
 		DBG_PSY_MSG("charger->vbat = %d\n",charger->vbat);
 		DBG_PSY_MSG("charger->ibat = %d\n",charger->ibat);
@@ -2218,7 +2189,7 @@ static int axp_battery_probe(struct platform_device *pdev)
 			Cou_Count_Clear(charger);
 		}
 		
-		if((charger->ocv > 4150) && (!charger->is_on) && (charger->ext_valid) && (charger->charge_on)&&(!charger->disibat)){
+		if((charger->vbat > 4100) && (!charger->is_on) && (charger->ext_valid) && (charger->charge_on)&&(!charger->disibat)){
 			charger->rest_vol = 100;
 			saved_cap = 100 - 100 * (Cur_CoulombCounter) / bat_cap;
 			Set_Rest_Cap(charger,saved_cap);
@@ -2518,7 +2489,7 @@ static int axp20_resume(struct platform_device *dev)
 		}
 
 /******************************出错处理，如果初始Pre_rest_cap估计偏小，导致充满后用库仑计计算的电量低于100%****************/
-		if((charger->ocv > 4150) && (charger->rest_vol	< 100) && (charger->bat_current_direction == 0x0) && (charger->	ext_valid == 1)&&(charger->charge_on)&&(!charger->disibat)) {
+		if((charger->vbat > 4100) && (charger->rest_vol	< 100) && (charger->bat_current_direction == 0x0) && (charger->	ext_valid == 1)&&(charger->charge_on)&&(!charger->disibat)) {
 			DBG_PSY_MSG("Resume:charger->rest_vol = %d -> 100\n",charger->rest_vol);
 			charger->rest_vol =	100;
 			Cur_CoulombCounter = Get_Bat_Coulomb_Count(charger);
@@ -2555,7 +2526,7 @@ static int axp20_resume(struct platform_device *dev)
 		DBG_PSY_MSG("val = 0x%x,pre_rest_vol = %d,rest_vol = %d\n",val,pre_rest_vol,charger->rest_vol);
 
 		/* full	*/
-		if((charger->ocv) >= 4150 && !charger->bat_current_direction && charger->ext_valid &&(charger->charge_on)&&(!charger->disibat)) {
+		if((charger->vbat) >= 4100 && !charger->bat_current_direction && charger->ext_valid &&(charger->charge_on)&&(!charger->disibat)) {
 			charger->rest_vol =	100;
 		}
 

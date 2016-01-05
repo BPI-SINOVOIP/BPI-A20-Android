@@ -548,9 +548,7 @@ function mklichee()
 
     mk_info "build lichee ..."
 
-    # bpi, skip build uboot
-    # mkbr && mkkernel && mkuboot && mkrootfs
-    mkbr && mkkernel && mkrootfs
+    mkbr && mkkernel && mkuboot && mkrootfs
 
     [ $? -ne 0 ] && return 1
 

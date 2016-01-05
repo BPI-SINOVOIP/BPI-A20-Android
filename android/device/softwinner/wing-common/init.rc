@@ -35,7 +35,7 @@ loglevel 3
     export BOOTCLASSPATH /system/framework/core.jar:/system/framework/core-junit.jar:/system/framework/bouncycastle.jar:/system/framework/ext.jar:/system/framework/framework.jar:/system/framework/telephony-common.jar:/system/framework/mms-common.jar:/system/framework/android.policy.jar:/system/framework/services.jar:/system/framework/apache-xml.jar
 
 # Backward compatibility
-      insmod  /nand.ko 
+    #insmod  /nand.ko 
     symlink /system/etc /etc
     symlink /sys/kernel/debug /d
     mount debugfs debugfs /sys/kernel/debug

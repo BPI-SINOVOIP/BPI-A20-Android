@@ -199,8 +199,6 @@ static u32 get_id_state(struct usb_scan_info *info)
         }
     }
 
-	//printk("[#####] %s: id_state = %d\n", __func__, id_state);
-
     return id_state;
 }
 
@@ -247,18 +245,9 @@ static u32 get_detect_vbus_state(struct usb_scan_info *info)
         }else{
             det_vbus_state = USB_DET_VBUS_INVALID;
         }
-
-		/* bpi, set usb0 vbus state valid because hw design not connect USB0-DRV to AXP.
-		 * USB0-IDDET is also not connect to AP by gpio.
-		 */
-		det_vbus_state = USB_DET_VBUS_VALID;
-		
     }else{
         det_vbus_state = info->det_vbus_old_state;
     }
-
-	//printk("[#####] %s: det_vbus_state = %d\n", __func__, det_vbus_state);
-	
     return det_vbus_state;
 }
 

@@ -697,6 +697,7 @@ static int __init bluesleep_probe(struct platform_device *pdev)
 	int ret;
 	script_item_u val;
 	script_item_value_type_e type;
+	int bt_used = 0;
 
 	bsi = kzalloc(sizeof(struct bluesleep_info), GFP_KERNEL);
 	if (!bsi)
@@ -704,6 +705,18 @@ static int __init bluesleep_probe(struct platform_device *pdev)
 
 	//set bt_wake_assert and host_wake_assert to 1,it should be modified later
 	bsi->bt_wake_assert = bsi->host_wake_assert = 1;
+
+	type = script_get_item("bt_para", "bt_used", &val);
+	if (type == SCIRPT_ITEM_VALUE_TYPE_INT){
+		BT_INFO("get bt_used = %d\n", val.val);
+		bt_used = val.val;
+	} else {
+		BT_ERR("get bt_wake gpio failed\n");
+		bt_used = 0;
+	}
+
+	if(bt_used == 0)
+		return -ENODEV;
 
 	//get bt_wake & bt_host_wake from sys_config.fex
 	type = script_get_item("bt_para", "bt_wake", &val);

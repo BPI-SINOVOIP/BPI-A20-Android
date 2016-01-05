@@ -69,6 +69,10 @@ ifneq ($(filter R1%,$(TARGET_DEVICE)),)
 LOCAL_CFLAGS += -D__SUN7I__
 endif
 
+ifneq ($(filter bpi%,$(TARGET_DEVICE)),)
+LOCAL_CFLAGS += -D__SUN7I__
+endif
+
 
 LOCAL_MODULE := camera.$(TARGET_BOARD_PLATFORM)
 
