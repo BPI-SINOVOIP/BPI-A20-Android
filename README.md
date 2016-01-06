@@ -59,6 +59,7 @@ Run build.sh to select a target build.
 > 
 > TARGET_DEVICE=bpi_m1plus_hdmi VARIANT=eng
 
+LCD build type for all target is not working now.
 
 
 
