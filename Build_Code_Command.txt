@@ -1,0 +1,14 @@
+*********************************
+build homlet (Boxs)
+
+1, $cd lichee
+   $ ./build.sh -p sun7i_android
+
+2, $cd ../android
+   $source build/envsetup.sh
+   $lunch    
+   $extract-bsp
+   $make -j8
+   $pack
+
+
