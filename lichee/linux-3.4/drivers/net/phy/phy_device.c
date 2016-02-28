@@ -776,16 +776,11 @@ int genphy_update_link(struct phy_device *phydev)
 	if (phydev->drv->update_link)
 		return phydev->drv->update_link(phydev);
 
-	printk("%s %d\n", __func__, __LINE__);
-
 	/* Do a fake read */
 	status = phy_read(phydev, MII_BMSR);
 
 	if (status < 0)
 		return status;
-
-	
-	printk("%s %d\n", __func__, __LINE__);
 
 	/* Read link and autonegotiation status */
 	status = phy_read(phydev, MII_BMSR);
@@ -793,15 +788,10 @@ int genphy_update_link(struct phy_device *phydev)
 	if (status < 0)
 		return status;
 
-	
-	printk("%s %d\n", __func__, __LINE__);
-
 	if ((status & BMSR_LSTATUS) == 0)
 		phydev->link = 0;
 	else
 		phydev->link = 1;
-
-	printk("%s %d phydev->link = %d\n", __func__, __LINE__, phydev->link);
 
 	return 0;
 }
@@ -822,8 +812,6 @@ int genphy_read_status(struct phy_device *phydev)
 	int err;
 	int lpa;
 	int lpagb = 0;
-
-	printk("%s: \n", __func__);
 
 	/* Update the link, but return if there
 	 * was an error */
@@ -1108,11 +1096,11 @@ static int __init phy_init(void)
 	if (rc)
 		return rc;
 
-    //if(b53_used) {
-    //    rc = b53_phy_driver_register();
-    //} else {
+    if(b53_used) {
+        rc = b53_phy_driver_register();
+    } else {
         phy_driver_register(&genphy_driver);
-    //}
+    }
 
 	if (rc)
 		mdio_bus_exit();

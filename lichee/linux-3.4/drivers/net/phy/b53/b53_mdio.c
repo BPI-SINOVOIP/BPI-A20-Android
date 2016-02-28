@@ -356,8 +356,6 @@ static int b53_phy_read_status(struct phy_device *phydev)
 	struct b53_device *priv = phydev->priv;
 	u16 lnk;
 	
-	printk("[arlen] b53_flow, %s\n", __func__);
-
 	if (is5325(priv) || is5365(priv))
 		phydev->speed = 100;
 	else
@@ -430,7 +428,7 @@ static struct phy_driver b53_phy_driver_id3 = {
 	},
 };
 
-#if 0
+#if 1
 int b53_phy_driver_register(void)
 {
 	int ret;
@@ -471,6 +469,7 @@ printk("[arlen] b53_flow, %s\n", __func__);
 }
 #endif
 
+/*
 int __init b53_phy_driver_register(void)
 {
 	int ret;
@@ -504,6 +503,6 @@ void __exit b53_phy_driver_unregister(void)
 
 module_init(b53_phy_driver_register);
 module_exit(b53_phy_driver_unregister);
-
+*/
 MODULE_DESCRIPTION("B53 MDIO access driver");
 MODULE_LICENSE("Dual BSD/GPL");
