@@ -251,7 +251,7 @@ static u32 get_detect_vbus_state(struct usb_scan_info *info)
 		/* bpi, set usb0 vbus state valid because hw design not connect USB0-DRV to AXP.
 		 * USB0-IDDET is also not connect to AP by gpio.
 		 */
-		det_vbus_state = USB_DET_VBUS_VALID;
+		//det_vbus_state = USB_DET_VBUS_VALID;
 		
     }else{
         det_vbus_state = info->det_vbus_old_state;

@@ -1498,13 +1498,13 @@ pmu_used                 = 1
 pmu_twi_addr             = 0x34
 pmu_twi_id               = 0
 pmu_irq_id               = 32
-pmu_battery_rdc          = 110
-pmu_battery_cap          = 4400
-pmu_init_chgcur          = 1500
-pmu_earlysuspend_chgcur  = 1500
-pmu_suspend_chgcur       = 1300
-pmu_resume_chgcur        = 1500
-pmu_shutdown_chgcur      = 1300
+pmu_battery_rdc          = 100
+pmu_battery_cap          = 3200
+pmu_init_chgcur          = 300
+pmu_earlysuspend_chgcur  = 600
+pmu_suspend_chgcur       = 1000
+pmu_resume_chgcur        = 300
+pmu_shutdown_chgcur      = 1000
 pmu_init_chgvol          = 4200
 pmu_init_chgend_rate     = 15
 pmu_init_chg_enabled     = 1
@@ -1532,15 +1532,15 @@ pmu_bat_para15           = 92
 pmu_bat_para16           = 100
 
 pmu_usbvol_limit         = 1
-pmu_usbcur_limit         = 1
+pmu_usbcur_limit         = 0
 pmu_usbvol               = 4000
-pmu_usbcur               = 500
+pmu_usbcur               = 0
 
 pmu_usbvol_pc            = 4400
 pmu_usbcur_pc            = 0
 
-pmu_pwroff_vol           = 3400
-pmu_pwron_vol            = 3200
+pmu_pwroff_vol           = 3300
+pmu_pwron_vol            = 2900
 
 pmu_pekoff_time          = 10000
 pmu_pekoff_en            = 1
