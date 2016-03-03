@@ -448,7 +448,11 @@ int phy_start_aneg(struct phy_device *phydev)
 	if (phydev->state != PHY_HALTED) {
 		if (AUTONEG_ENABLE == phydev->autoneg) {
 			phydev->state = PHY_AN;
+#if 0  /* bpi */
 			phydev->link_timeout = PHY_AN_TIMEOUT;
+#else
+			phydev->link_timeout = 5;
+#endif
 		} else {
 			phydev->state = PHY_FORCING;
 			phydev->link_timeout = PHY_FORCE_TIMEOUT;
@@ -527,7 +531,7 @@ static void phy_force_reduction(struct phy_device *phydev)
 	phydev->speed = settings[idx].speed;
 	phydev->duplex = settings[idx].duplex;
 
-	pr_info("Trying %d/%s\n", phydev->speed,
+	pr_info("%s: Trying %d/%s\n", __func__, phydev->speed,
 			DUPLEX_FULL == phydev->duplex ?
 			"FULL" : "HALF");
 }
@@ -823,6 +827,8 @@ void phy_state_machine(struct work_struct *work)
 	if (phydev->adjust_state)
 		phydev->adjust_state(phydev->attached_dev);
 
+	printk(KERN_ERR "%s: phydev->state = %d\n", __func__, phydev->state);
+
 	switch(phydev->state) {
 		case PHY_DOWN:
 		case PHY_STARTING:
@@ -883,7 +889,7 @@ void phy_state_machine(struct work_struct *work)
 
 				phydev->autoneg = AUTONEG_DISABLE;
 
-				pr_info("Trying %d/%s\n", phydev->speed,
+				pr_info("%s: Trying %d/%s\n", __func__, phydev->speed,
 						DUPLEX_FULL ==
 						phydev->duplex ?
 						"FULL" : "HALF");

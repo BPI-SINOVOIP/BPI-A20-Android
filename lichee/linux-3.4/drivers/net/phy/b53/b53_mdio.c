@@ -351,11 +351,26 @@ static int b53_phy_config_aneg(struct phy_device *phydev)
 	return 0;
 }
 
+static int b53_phy_update_link(struct phy_device *phydev)
+{
+	struct b53_device *priv = phydev->priv;
+	u16 lnk;
+
+	b53_read16(priv, B53_STAT_PAGE, B53_LINK_STAT, &lnk);
+	lnk = (lnk >> 3) & 1;
+	phydev->link = lnk;
+
+	printk("%s: phydev->link = %d\n", __func__, phydev->link);
+
+	return 0;
+}
+
 static int b53_phy_read_status(struct phy_device *phydev)
 {
 	struct b53_device *priv = phydev->priv;
 	u16 lnk;
 	
+
 	if (is5325(priv) || is5365(priv))
 		phydev->speed = 100;
 	else
@@ -373,9 +388,11 @@ static int b53_phy_read_status(struct phy_device *phydev)
 	phydev->adjust_link(phydev->attached_dev);
 #else
 	b53_read16(priv, B53_STAT_PAGE, B53_LINK_STAT, &lnk);
-	lnk = (lnk >> 3) & 1;
+	lnk = (lnk >> 3) & 1;    //port3
 	phydev->link = lnk;
 #endif
+
+	printk("%s: phydev->link = %d\n", __func__, phydev->link);
 
 	return 0;
 }
@@ -391,6 +408,7 @@ static struct phy_driver b53_phy_driver_id1 = {
 	.config_aneg	= b53_phy_config_aneg,
 	.config_init	= b53_phy_config_init,
 	.read_status	= b53_phy_read_status,
+	.update_link	= b53_phy_update_link,
 	.driver = {
 		.owner = THIS_MODULE,
 	},
@@ -407,6 +425,7 @@ static struct phy_driver b53_phy_driver_id2 = {
 	.config_aneg	= b53_phy_config_aneg,
 	.config_init	= b53_phy_config_init,
 	.read_status	= b53_phy_read_status,
+	.update_link	= b53_phy_update_link,
 	.driver = {
 		.owner = THIS_MODULE,
 	},
@@ -423,6 +442,7 @@ static struct phy_driver b53_phy_driver_id3 = {
 	.config_aneg	= b53_phy_config_aneg,
 	.config_init	= b53_phy_config_init,
 	.read_status	= b53_phy_read_status,
+	.update_link	= b53_phy_update_link,
 	.driver = {
 		.owner = THIS_MODULE,
 	},
