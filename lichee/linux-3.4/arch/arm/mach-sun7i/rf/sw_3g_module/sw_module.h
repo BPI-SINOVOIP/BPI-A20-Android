@@ -68,6 +68,8 @@ struct sw_modem{
     unsigned long trig_type;  /* 中断触发方式 */
     struct input_dev *key;
 
+	struct delayed_work work;
+
     u32 used;
     u32 usbc_no;                        /* 挂载的USB控制器编号 */
     u32 uart_no;                        /* 挂载的uart控制器 */

@@ -179,11 +179,15 @@ static int ir_addr_code = 0x9f00;
 static unsigned long power_key = 0;
 static int suspend_status_flag = 0;
 
-int pm_wakeup_src_enable(int src)
+void pm_wakeup_src_enable(int src)
 {
     standby_wakeup_src |= src;
 }
 EXPORT_SYMBOL(pm_wakeup_src_enable);
+
+/* bpi, add wakeup source flag for ir power key wakeup android */
+unsigned int normal_standby_wakesource = 0;
+EXPORT_SYMBOL(normal_standby_wakesource);
 
 //hechuanlong start------------
 #define IR_CHECK_ADDR_CODE  
@@ -792,8 +796,10 @@ enter_standby:
         //standby_info.standby_para.event_enable = (SUSPEND_WAKEUP_SRC_EXINT | SUSPEND_WAKEUP_SRC_ALARM | SUSPEND_WAKEUP_SRC_IR);
 				standby_info.standby_para.event_enable |= standby_wakeup_src;
 				standby_info.standby_para.event_enable |= (SUSPEND_WAKEUP_SRC_EXINT | SUSPEND_WAKEUP_SRC_ALARM );
-	if(ir_wakeup)
-		standby_info.standby_para.event_enable |= SUSPEND_WAKEUP_SRC_IR;
+
+		if(ir_wakeup)
+			standby_info.standby_para.event_enable |= SUSPEND_WAKEUP_SRC_IR;
+	
         if (standby_timeout != 0)
         {
             standby_info.standby_para.event_enable |= (SUSPEND_WAKEUP_SRC_TIMEOFF);
@@ -802,25 +808,34 @@ enter_standby:
         /* goto sram and run */
         printk("standby_mode:%d, standby_type:%d, line:%d\n",standby_mode, standby_type, __LINE__);
         standby(&standby_info);
+		
+/* ---------------------------------------------------------------------------------------------------------------------------------- */
+
 		standby_output.event = standby_info.standby_para.event;
         standby_output.ir_data_cnt = standby_info.standby_para.ir_data_cnt;
+		
         //hechuanlong start--------------------
       if(standby_info.standby_para.event == SUSPEND_WAKEUP_SRC_IR)
     	{
     		unsigned long code;
     		code = ir_packet_handler(standby_info.standby_para.ir_buffer,standby_info.standby_para.ir_data_cnt);
     		printk("pm_info.standby_para.event=0x%x ir_buffer.dcnt=%d\n",standby_info.standby_para.event,standby_info.standby_para.ir_data_cnt);
-    		printk("ir_packet_handler=%x\n",code);
+    		printk("ir_packet_handler=%lx\n",code);
     		if((power_key != ((code>>16)&0xff)) || !ir_code_valid(code))
     		{
     			printk("ir_code_valid = %x\n",ir_code_valid(code));
     			goto enter_standby;
     		}
-			}
+		}
         //hechuanlong end-----------------------
 		memcpy(standby_output.ir_buffer, standby_info.standby_para.ir_buffer, STANDBY_IR_BUF_SIZE);
         standby_info.standby_para.ir_data_cnt = 0;
         printk("standby_mode:%d, standby_type:%d, line:%d\n",standby_mode, standby_type, __LINE__);
+
+		/* bpi, add wakeup source flag for ir power key wakeup android */
+		normal_standby_wakesource = standby_info.standby_para.event;
+		printk("normal_standby_wakesource = %x\n", normal_standby_wakesource);
+		
     }else if(SUPER_STANDBY == standby_type){
         printk("standby_mode:%d, standby_type:%d, line:%d\n",standby_mode, standby_type, __LINE__);
             print_call_info();
@@ -1158,10 +1173,10 @@ static int __init aw_pm_init(void)
     if(SCIRPT_ITEM_VALUE_TYPE_INT != script_get_item("ir_para", "power_key", &item)){
         pr_err("%s: script_parser_fetch err. \n", __func__);
         power_key = 0x57;
-        pr_err("notice: power_key = %d.\n", power_key);
+        pr_err("notice: power_key = %lx.\n", power_key);
     }else{
         power_key = item.val;
-        pr_info("power_key = %d. \n", power_key);
+        pr_info("power_key = %lx. \n", power_key);
     }
 
     //get wakeup_src_para cpu_en
