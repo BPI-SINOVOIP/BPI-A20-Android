@@ -1381,13 +1381,12 @@ switch_used=1
 ;-------------------------------------------------------------------------------
 ;ir --- infra remote configuration
 ;支持无MCU板子红外唤醒 ir_wakeup=1 有MCU设为0
-;power key must be as the same as defined in ir-keymap.h 
 ;-------------------------------------------------------------------------------
 [ir_para]
 ir_used             = 1
 ir_rx               = port:PB04<2><default><default><default>
 ir_wakeup           = 1
-power_key           = 0x12
+power_key           = 0x74
 ir_addr_code        = 0xc617
 
 ;----------------------------------------------------------------------------------                                   

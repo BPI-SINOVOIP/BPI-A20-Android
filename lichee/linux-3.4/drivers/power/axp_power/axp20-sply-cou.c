@@ -759,8 +759,8 @@ static int axp_battery_event(struct notifier_block *nb, unsigned long event,
 			axp_capchange(charger);
 		}
 
-		if(event & (AXP20_IRQ_ACIN|AXP20_IRQ_USBIN|AXP20_IRQ_ACOV|AXP20_IRQ_USBOV|AXP20_IRQ_CHAOV
-					|AXP20_IRQ_CHAST|AXP20_IRQ_TEMOV|AXP20_IRQ_TEMLO)) {
+		if(event & (AXP20_IRQ_ACIN|AXP20_IRQ_USBIN|AXP20_IRQ_ACOV|AXP20_IRQ_USBOV|/*AXP20_IRQ_CHAOV
+					|AXP20_IRQ_CHAST|*/AXP20_IRQ_TEMOV|AXP20_IRQ_TEMLO)) {
 			axp_change(charger);
 		}
 
@@ -1433,6 +1433,17 @@ int Get_Bat_Coulomb_Count(struct axp_charger *charger)
 	return Cur_CoulombCounter_tmp;				//unit mAh
 }
 
+static void axp_battery_enable_charger(struct axp_charger *charger, int enable)
+{
+	if(enable){
+		pr_info("++++++++++++++ charger enable  ++++++++++++++++++++\n");
+		axp_set_bits(charger->master,AXP20_CHARGE_CONTROL1,0x80);
+	} else {
+		pr_info("++++++++++++++ charger disable ++++++++++++++++++++\n");
+		axp_clr_bits(charger->master,AXP20_CHARGE_CONTROL1,0x80);
+	}
+}
+
 static void axp_charging_monitor(struct work_struct *work)
 {
 	struct axp_charger *charger;
@@ -1448,14 +1459,25 @@ static void axp_charging_monitor(struct work_struct *work)
 	int	flag_notfristin;
 	uint8_t data_mm[12];
 	int mm;
+	int stop_charger=0;
 
 	charger = container_of(work, struct axp_charger, work.work);
 	axp_reads(charger->master,AXP20_IC_TYPE,2,v);
 	flag_notfristin	= (v[1]	>> 6) &	0x1;
 	Cou_Correction_Flag	= (v[1]	>> 5) &	0x1;
 	pre_rest_vol = charger->rest_vol;
-	axp_charger_update_state(charger);
-	axp_charger_update(charger);
+
+        if(charger->rest_vol < 90) {
+               axp_charger_update_state(charger);
+               axp_charger_update(charger);
+               axp_battery_enable_charger(charger, 0);
+               msleep(1000);
+               stop_charger = 1;
+        } 
+        else {
+               axp_charger_update_state(charger);
+               axp_charger_update(charger);
+        }
 
 	if(charger->is_on && axp20_icharge_to_mA(charger->adc->ichar_res) > 200 && charger->vbat > 3500 && charger->disvbat != 0){
 		if((((v[1] >> 7) == 0) || (((v[1] >> 3) & 0x1) == 0)) && count_rdc >= 3){
@@ -1503,6 +1525,8 @@ static void axp_charging_monitor(struct work_struct *work)
 			}
 		}
 	}
+
+	DBG_PSY_MSG("flag_state_change	= %d\n", flag_state_change);
 	
 	if(flag_state_change){
 		rt_rest_vol	= charger->ocv_rest_vol;
@@ -1511,8 +1535,8 @@ static void axp_charging_monitor(struct work_struct *work)
 			flag_state_change =	0;
 			change_flag	= 1;
 		}
-		if(axp_debug)
-			DBG_PSY_MSG("==flag_state_change =	%d==(when >= 4 corrent rdc)=\n",flag_state_change);
+
+		DBG_PSY_MSG("==flag_state_change =	%d==(when >= 4 corrent rdc)=\n",flag_state_change);
 	}
 	
 	charger->ocv_rest_vol =	rt_rest_vol;
@@ -1724,6 +1748,7 @@ static void axp_charging_monitor(struct work_struct *work)
 		DBG_PSY_MSG("charger->is_on = %d\n",charger->is_on);
 		DBG_PSY_MSG("charger->charge_on = %d\n",charger->charge_on);
 		DBG_PSY_MSG("charger->ext_valid = %d\n",charger->ext_valid);
+		DBG_PSY_MSG("charger->bat_current_direction = %d\n",charger->bat_current_direction);
 		DBG_PSY_MSG("count_dis = %d\n",count_dis);
 		DBG_PSY_MSG("count_rdc = %d\n",count_rdc);
 		DBG_PSY_MSG("pmu_init_chgcur           = %d\n",pmu_init_chgcur);
@@ -1744,8 +1769,14 @@ static void axp_charging_monitor(struct work_struct *work)
 		axp_write(charger->master,AXP20_DATA_BUFFER1,charger->rest_vol | 0x80);
 		power_supply_changed(&charger->batt);
 	}
+
+	if(stop_charger) {
+		axp_battery_enable_charger(charger, 1);
+		stop_charger = 0;
+	} 
+	
 	/* reschedule for the next time */
-	schedule_delayed_work(&charger->work, charger->interval);
+	schedule_delayed_work(&charger->work, /*charger->interval*/msecs_to_jiffies(30 * 1000));
 }
 
 static void axp_usb(struct work_struct *work)
@@ -2162,7 +2193,7 @@ static int axp_battery_probe(struct platform_device *pdev)
 	axp_read(charger->master,AXP20_DATA_BUFFER1,&val1);
 	DBG_PSY_MSG("last_rest_vol = %d, now_rest_vol	= %d\n",(val1 &	0x7F),charger->ocv_rest_vol);
 
-	bat_cap =	Get_Buffer_Cou(charger);
+	bat_cap = Get_Buffer_Cou(charger);
 
 	axp_read(charger->master,AXP20_DATA_BUFFER0,&val);
 	Get_Rest_Cap(charger,&saved_cap);
@@ -2645,7 +2676,7 @@ static void axp20_shutdown(struct platform_device *dev)
 	else
 		axp_set_bits(charger->master,AXP20_CHARGE_CONTROL1,0x80);
 
-		printk("pmu_shutdown_chgcur = %d\n", pmu_shutdown_chgcur);
+	printk("pmu_shutdown_chgcur = %d\n", pmu_shutdown_chgcur);
 
 	if(pmu_shutdown_chgcur >= 300000 && pmu_shutdown_chgcur <= 1800000){
 		tmp = (pmu_shutdown_chgcur -200001)/100000;

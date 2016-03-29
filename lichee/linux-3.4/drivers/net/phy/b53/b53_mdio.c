@@ -20,6 +20,7 @@
 #include <linux/phy.h>
 #include <linux/module.h>
 
+#include "b53_regs.h"
 #include "b53_priv.h"
 
 #define B53_PSEUDO_PHY	0x1e /* Register Access Pseudo PHY */
@@ -350,12 +351,26 @@ static int b53_phy_config_aneg(struct phy_device *phydev)
 	return 0;
 }
 
+static int b53_phy_update_link(struct phy_device *phydev)
+{
+	struct b53_device *priv = phydev->priv;
+	u16 lnk;
+
+	b53_read16(priv, B53_STAT_PAGE, B53_LINK_STAT, &lnk);
+	lnk = (lnk >> 3) & 1;
+	phydev->link = lnk;
+
+	printk("%s: phydev->link = %d\n", __func__, phydev->link);
+
+	return 0;
+}
+
 static int b53_phy_read_status(struct phy_device *phydev)
 {
 	struct b53_device *priv = phydev->priv;
-#if flow_log
-printk("[arlen] b53_flow, %s\n", __func__);
-#endif
+	u16 lnk;
+	
+
 	if (is5325(priv) || is5365(priv))
 		phydev->speed = 100;
 	else
@@ -365,11 +380,19 @@ printk("[arlen] b53_flow, %s\n", __func__);
 		phydev->speed = 1000;
 #endif
 	phydev->duplex = DUPLEX_FULL;
+
+#if 0
 	phydev->link = 1;
 	phydev->state = PHY_RUNNING;
-
 	netif_carrier_on(phydev->attached_dev);
 	phydev->adjust_link(phydev->attached_dev);
+#else
+	b53_read16(priv, B53_STAT_PAGE, B53_LINK_STAT, &lnk);
+	lnk = (lnk >> 3) & 1;    //port3
+	phydev->link = lnk;
+#endif
+
+	printk("%s: phydev->link = %d\n", __func__, phydev->link);
 
 	return 0;
 }
@@ -385,6 +408,7 @@ static struct phy_driver b53_phy_driver_id1 = {
 	.config_aneg	= b53_phy_config_aneg,
 	.config_init	= b53_phy_config_init,
 	.read_status	= b53_phy_read_status,
+	.update_link	= b53_phy_update_link,
 	.driver = {
 		.owner = THIS_MODULE,
 	},
@@ -401,6 +425,7 @@ static struct phy_driver b53_phy_driver_id2 = {
 	.config_aneg	= b53_phy_config_aneg,
 	.config_init	= b53_phy_config_init,
 	.read_status	= b53_phy_read_status,
+	.update_link	= b53_phy_update_link,
 	.driver = {
 		.owner = THIS_MODULE,
 	},
@@ -417,11 +442,13 @@ static struct phy_driver b53_phy_driver_id3 = {
 	.config_aneg	= b53_phy_config_aneg,
 	.config_init	= b53_phy_config_init,
 	.read_status	= b53_phy_read_status,
+	.update_link	= b53_phy_update_link,
 	.driver = {
 		.owner = THIS_MODULE,
 	},
 };
 
+#if 1
 int b53_phy_driver_register(void)
 {
 	int ret;
@@ -460,6 +487,7 @@ printk("[arlen] b53_flow, %s\n", __func__);
 	phy_driver_unregister(&b53_phy_driver_id2);
 	phy_driver_unregister(&b53_phy_driver_id1);
 }
+#endif
 
 /*
 int __init b53_phy_driver_register(void)
@@ -479,6 +507,8 @@ int __init b53_phy_driver_register(void)
 		return 0;
 
 	phy_driver_unregister(&b53_phy_driver_id2);
+
+	printk("^^^^^^^^^^^^%s: b53 phy driver register end\n", __func__);
 err1:
 	phy_driver_unregister(&b53_phy_driver_id1);
 	return ret;
@@ -494,6 +524,5 @@ void __exit b53_phy_driver_unregister(void)
 module_init(b53_phy_driver_register);
 module_exit(b53_phy_driver_unregister);
 */
-
 MODULE_DESCRIPTION("B53 MDIO access driver");
 MODULE_LICENSE("Dual BSD/GPL");

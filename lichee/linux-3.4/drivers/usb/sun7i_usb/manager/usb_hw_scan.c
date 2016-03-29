@@ -245,6 +245,12 @@ static u32 get_detect_vbus_state(struct usb_scan_info *info)
         }else{
             det_vbus_state = USB_DET_VBUS_INVALID;
         }
+
+	/* bpi, set usb0 vbus state valid because qbox hw design not connect USB0-DRV to AXP.
+         * USB0-IDDET is also not connect to AP by gpio.
+	 * uncomment this line to enable adb for qbox.
+         */
+        //det_vbus_state = USB_DET_VBUS_VALID;
     }else{
         det_vbus_state = info->det_vbus_old_state;
     }

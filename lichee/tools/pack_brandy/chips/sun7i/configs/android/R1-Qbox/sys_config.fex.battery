@@ -191,7 +191,7 @@ gmac_txck = port:PA15<5><default><3><default>
 gmac_clkin = port:PA16<5><default><3><default>
 gmac_txerr = port:PA17<0><default><3><default>
 [gmac_phy_power]
-gmac_phy_power_en = port:PH23<1><default><default><1>
+gmac_phy_power_en = port:PH23<1><default><default><0>
 
 ;-------------------------------------------------------------------------------
 ;phy configuration
@@ -1183,7 +1183,7 @@ wifi_power         = ""
 ;bcm40183_wl_host_wake  = port:PH10<0><default><default><0>
 ;bcm40183_bt_rst        = port:PB05<1><default><default><0>
 ;bcm40183_bt_regon      = port:PB05<1><default><default><0>
-;bcm40183_bt_wake       = port:PI20<1><default><default><0>
+;bcm40183_bt_wake       = port:PI15<1><default><default><0>
 ;bcm40183_bt_host_wake  = port:PI21<0><default><default><0>
 
 ; 3 - rtl8723as sdio wifi + bt gpio config
@@ -1211,7 +1211,7 @@ ap6xxx_wl_regon      = port:PH22<1><default><default><0>
 ap6xxx_wl_host_wake  = port:PH15<6><default><default><default>
 ap6xxx_bt_regon      = port:PB05<1><default><default><0>
 ap6xxx_bt_wake       = port:PI20<1><default><default><0>
-ap6xxx_bt_host_wake  = port:PH02<6><default><default><default>
+ap6xxx_bt_host_wake  = port:PI15<6><default><default><default>
 ap6xxx_lpo	     = port:PI12<0><default><default><0>
 ap6xxx_wl_host_wake_invert = 0
 
@@ -1234,11 +1234,11 @@ modem_used	= 1
 modem_usbc_num	= 2
 modem_uart_num	= 5
 modem_name		= "sim7100c"
-modem_vbat		= port:PG01<1><default><default><0>
-modem_pwr_on		= port:PG03<1><default><default><0>
+modem_vbat		= port:PG02<1><default><default><0>
+modem_pwr_on		= port:PG01<1><default><default><0>
 modem_wake		= 
 modem_rf_dis		= port:PG00<1><default><default><0>
-modem_rst		= port:PG02<1><default><default><0>
+modem_rst		= port:PG03<1><default><default><0>
 modem_dldo         	= ""
 modem_dldo_min_uV	= 
 modem_dldo_max_uV	= 
@@ -1415,22 +1415,33 @@ ir_addr_code        = 0xc617
 ;----------------------------------------------------------------------------------
 [gpio_para]                    
 gpio_used                = 1
-gpio_num                 = 15
+gpio_num                 = 26
 gpio_pin_1               = port:PB21<1><default><default><0>
 gpio_pin_2               = port:PB20<1><default><default><0>
 gpio_pin_3               = port:PI03<1><default><default><0>
 gpio_pin_4               = port:PG10<1><default><default><0>
 gpio_pin_5               = port:PG11<1><default><default><0>
 gpio_pin_6               = port:PI19<1><default><default><0>
-gpio_pin_7               = port:PI18<1><default><default><0>
-gpio_pin_8               = port:PI17<1><default><default><0>
-gpio_pin_9               = port:PH20<1><default><default><0>
-gpio_pin_10              = port:PH21<1><default><default><0>
-gpio_pin_11              = port:PI16<1><default><default><0>
-gpio_pin_12              = port:PH24<1><default><default><0>
-gpio_pin_13              = port:PH25<1><default><default><0>
-gpio_pin_14              = port:PH26<1><default><default><0>
-gpio_pin_15              = port:PH27<1><default><default><0>
+gpio_pin_7               = port:PH02<1><default><default><0>
+gpio_pin_8               = port:PI18<1><default><default><0>
+gpio_pin_9               = port:PI17<1><default><default><0>
+gpio_pin_10              = port:PH20<1><default><default><0>
+gpio_pin_11              = port:PH21<1><default><default><0>
+gpio_pin_12              = port:PB02<1><default><default><0>
+gpio_pin_13              = port:PI13<1><default><default><0>
+gpio_pin_14              = port:PI16<1><default><default><0>
+gpio_pin_15              = port:PI11<1><default><default><0>
+gpio_pin_16              = port:PI10<1><default><default><0>
+gpio_pin_17              = port:PI14<1><default><default><0>
+gpio_pin_18              = port:PH24<1><default><default><0>
+gpio_pin_19              = port:PH25<1><default><default><0>
+gpio_pin_20              = port:PH26<1><default><default><0>
+gpio_pin_21              = port:PH27<1><default><default><0>
+gpio_pin_22              = port:PH06<1><default><default><1>
+gpio_pin_23              = port:PH07<1><default><default><1>
+gpio_pin_24              = port:PH08<1><default><default><1>
+gpio_pin_25              = port:PH17<1><default><default><0>
+gpio_pin_26              = port:PH18<1><default><default><0>
 
 
 ;-------------------------------------------------------------------------------

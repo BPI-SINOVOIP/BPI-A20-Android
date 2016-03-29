@@ -43,10 +43,10 @@ rmdir /bootloader
 
 target=`getprop ro.hardware`
 
-case "$target" in
-    "sun7i")
-        echo "performance" > /sys/devices/system/cpu/cpu0/cpufreq/scaling_governor
-        echo 1 > /sys/devices/system/cpu/cpu1/online
-        echo "performance" > /sys/devices/system/cpu/cpu0/cpufreq/scaling_governor
-    ;;
-esac
+#case "$target" in
+#    "sun7i")
+#        echo "performance" > /sys/devices/system/cpu/cpu0/cpufreq/scaling_governor
+#        echo 1 > /sys/devices/system/cpu/cpu1/online
+#        echo "performance" > /sys/devices/system/cpu/cpu0/cpufreq/scaling_governor
+#    ;;
+#esac

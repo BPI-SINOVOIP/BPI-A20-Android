@@ -31,14 +31,11 @@
 #include <mach/gpio.h>
 #include <linux/init-input.h>
 #include <linux/debugfs.h>
-#ifdef CONFIG_HAS_EARLYSUSPEND
-#include <linux/earlysuspend.h>
-#endif
 #include <mach/platform.h>
+#include <linux/power/aw_pm.h>
 
-#if defined(CONFIG_HAS_EARLYSUSPEND) || defined(CONFIG_PM)
+#ifdef CONFIG_PM
 #include <linux/pm.h>
-#include <linux/earlysuspend.h>
 #endif
 
 #include "ir-keymap.h"
@@ -103,12 +100,8 @@
 static struct clk *apb_ir_clk;
 static struct clk *ir_clk;
 
-
-#ifdef CONFIG_HAS_EARLYSUSPEND
-struct sun7i_ir_data {
-	struct early_suspend early_suspend;
-};
-#endif
+/* bpi, add wakeup source flag for ir power key wakeup android */
+extern unsigned int normal_standby_wakesource;
 
 struct ir_raw_buffer {
 	unsigned long dcnt;                  		/*Packet Count*/
@@ -130,10 +123,6 @@ static int system_wakestate = 0;
 
 #ifdef IR_ADDRESS_EXPORT
 static int debug_ir_addr = 0;
-#endif
-
-#ifdef CONFIG_HAS_EARLYSUSPEND
-static struct sun7i_ir_data *ir_data;
 #endif
 
 static struct ir_config_info ir_info = {
@@ -607,53 +596,60 @@ static void ir_timer_handle(unsigned long arg)
 	dprintk(DEBUG_INT, "ir_timer_handle: timeout \n");
 }
 
-#ifdef CONFIG_HAS_EARLYSUSPEND
-static void sun7i_ir_suspend(struct early_suspend *h)
+#ifdef CONFIG_PM
+static int sun7i_ir_suspend(struct device *dev)
 {
-/*	unsigned long tmp = 0;
-	int ret;
-	struct sun7i_ir_data *ts = container_of(h, struct sun7i_ir_data, early_suspend);
-
-	tmp = readl(IR_BASE+IR_CTRL_REG);
-	tmp &= 0xfffffffc;
-	writel(tmp, IR_BASE+IR_CTRL_REG);
-*/
 	dprintk(DEBUG_SUSPEND, "EARLYSUSPEND:enter earlysuspend: sun7i_ir_suspend. \n");
+	printk("%s: normal_standby_wakesource = %x\n", __func__, normal_standby_wakesource);
 	system_wakestate = 1;
-			if(!ir_wakeup){
-				 if(NULL == ir_clk || IS_ERR(ir_clk)) {
-						printk("ir_clk handle is invalid, just return!\n");
-						return;
-				} else {	
-						clk_disable(ir_clk);
-				}
-	
-				if(NULL == apb_ir_clk || IS_ERR(ir_clk)) {
-					printk("ir_clk handle is invalid, just return!\n");
-					return;
-				} else {	
-					clk_disable(apb_ir_clk);
-				}
-			}
 
+	if(!ir_wakeup){
+		if(NULL == ir_clk || IS_ERR(ir_clk)) {
+			printk("ir_clk handle is invalid, just return!\n");
+			return -EINVAL;
+		} else {	
+			clk_disable(ir_clk);
+		}
 	
+		if(NULL == apb_ir_clk || IS_ERR(ir_clk)) {
+			printk("ir_clk handle is invalid, just return!\n");
+			return -EINVAL;
+		} else {	
+			clk_disable(apb_ir_clk);
+		}
+	}
+
+	return 0;
 }
 
-static void sun7i_ir_resume(struct early_suspend *h)
+static int sun7i_ir_resume(struct device *dev)
 {
 
 	dprintk(DEBUG_INIT, "EARLYSUSPEND:enter laterresume: sun7i_ir_resume. \n");
+	printk("%s: normal_standby_wakesource = %x\n", __func__, normal_standby_wakesource);
 	system_wakestate = 0;
-		if(!ir_wakeup){
-			ir_code = 0;
-			timer_used = 0;
-			ir_reset_rawbuffer();
-			ir_clk_cfg();
-			ir_reg_cfg();
+
+	if(!ir_wakeup){
+		ir_code = 0;
+		timer_used = 0;
+		ir_reset_rawbuffer();
+		ir_clk_cfg();
+		ir_reg_cfg();
+	}
+	else {
+		/* bpi, add wakeup source flag for ir power key wakeup android */
+		if (normal_standby_wakesource & SUSPEND_WAKEUP_SRC_IR) {
+			printk("%s: ir power key wakeup\n", __func__);
+        	input_report_key(ir_dev, KEY_POWER, 1);
+       		input_sync(ir_dev);
+        	msleep(1);
+        	input_report_key(ir_dev, KEY_POWER, 0);
+        	input_sync(ir_dev);
+    	}
 	}
 
+	return 0;
 }
-#else
 #endif
 
 #ifdef IR_ADDRESS_EXPORT
@@ -714,6 +710,15 @@ static void sun7i_ir_debugfs_remove(void)
 		sun7i_ir_debugfs = NULL;
     }
 }
+#endif
+
+#ifdef CONFIG_PM
+static struct dev_pm_domain sun7i_ir_pm_domain = {
+	.ops = {
+		.suspend = sun7i_ir_suspend,
+		.resume = sun7i_ir_resume,
+	},
+};
 #endif
 
 static int __init ir_init(void)
@@ -793,18 +798,8 @@ static int __init ir_init(void)
 	ir_setup();
 
 
-#ifdef CONFIG_HAS_EARLYSUSPEND
-	dprintk(DEBUG_INIT, "==register_early_suspend =\n");
-	ir_data = kzalloc(sizeof(*ir_data), GFP_KERNEL);
-	if (ir_data == NULL) {
-		err = -ENOMEM;
-		goto err_alloc_data_failed;
-	}
-
-	ir_data->early_suspend.level = EARLY_SUSPEND_LEVEL_BLANK_SCREEN + 1;
-    ir_data->early_suspend.suspend = sun7i_ir_suspend;
-    ir_data->early_suspend.resume = sun7i_ir_resume;
-    register_early_suspend(&ir_data->early_suspend);
+#ifdef CONFIG_PM
+	ir_dev->dev.pm_domain = &sun7i_ir_pm_domain;	
 #endif
 
 #ifdef IR_ADDRESS_EXPORT
@@ -813,12 +808,6 @@ static int __init ir_init(void)
 
 	dprintk(DEBUG_INIT, "ir_init end\n");
 	return 0;
-
-#ifdef CONFIG_HAS_EARLYSUSPEND
-err_alloc_data_failed:
-    printk("alloc ir_data failed\n");
-	free_irq(IR_IRQNO, ir_dev);
-#endif
 
 fail4:
     printk("fail4\n");
@@ -839,10 +828,6 @@ static void __exit ir_exit(void)
 
 #ifdef IR_ADDRESS_EXPORT
     sun7i_ir_debugfs_remove();
-#endif
-
-#ifdef CONFIG_HAS_EARLYSUSPEND
-	unregister_early_suspend(&ir_data->early_suspend);
 #endif
 
 	free_irq(IR_IRQNO, ir_dev);

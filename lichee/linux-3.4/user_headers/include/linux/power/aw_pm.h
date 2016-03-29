@@ -56,7 +56,7 @@ struct aw_pmu_arg{
     unsigned char dev_addr;     /**<address of pmu device   */
 };
 
-extern int pm_wakeup_src_enable(int src);
+extern void pm_wakeup_src_enable(int src);
 
 #endif /* __AW_PM_H__ */
 

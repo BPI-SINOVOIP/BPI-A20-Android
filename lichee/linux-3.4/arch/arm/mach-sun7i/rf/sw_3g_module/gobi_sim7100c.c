@@ -13,6 +13,7 @@
 #include <linux/module.h>
 #include <linux/init.h>
 #include <linux/device.h>
+#include <linux/workqueue.h>
 #include <linux/errno.h>
 #include <linux/err.h>
 #include <linux/kernel.h>
@@ -55,6 +56,16 @@ static char g_sim7100c_name[] = MODEM_NAME;
 //
 //-----------------------------------------------------------------------------
 
+static void sim7100c_vbus_on_work(struct work_struct *work)
+{
+	struct sw_modem *modem = container_of(work, struct sw_modem, work.work);
+
+	modem_dbg("############ %s modem vbus power on\n", modem->name);
+	
+	modem_reset(modem, 1); 
+}
+
+
 void sim7100c_reset(struct sw_modem *modem)
 {
     modem_dbg("reset %s modem\n", modem->name);
@@ -81,8 +92,10 @@ static void sim7100c_sleep(struct sw_modem *modem, u32 sleep)
 
     if(sleep){
         modem_sleep(modem, 0);
+		modem_reset(modem, 0); 
     }else{
         modem_sleep(modem, 1);
+		schedule_delayed_work(&modem->work,	msecs_to_jiffies(5 * 1000));
     }
 
     return;
@@ -165,6 +178,8 @@ static int sim7100c_start(struct sw_modem *mdev)
 	modem_dbg("%s\n", __func__);
 
     sim7100c_power(mdev, 1);
+
+	INIT_DELAYED_WORK(&mdev->work, sim7100c_vbus_on_work);
 
     return 0;
 }
