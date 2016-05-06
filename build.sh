@@ -14,9 +14,6 @@ echo "------------------------------------------"
 echo "	1. BPI_M1_HDMI"
 echo "	2. BPI_R1_HDMI"
 echo "	3. BPI_M1Plus_HDMI"
-echo "	4. BPI_M1_LCD"
-echo "	5. BPI_R1_LCD"
-echo "	6. BPI_M1Plus_LCD"
 echo "------------------------------------------"
 
 read -p "Please choose a target(1-6): " board
@@ -31,9 +28,6 @@ case $board in
 	1) TARGET_DEVICE="bpi_m1_hdmi";;
 	2) TARGET_DEVICE="bpi_r1_hdmi";;
 	3) TARGET_DEVICE="bpi_m1plus_hdmi";;
-	4) TARGET_DEVICE="bpi_m1_lcd";;
-	5) TARGET_DEVICE="bpi_r1_lcd";;
-	6) TARGET_DEVICE="bpi_m1plus_lcd";;
 esac
 
 #echo "This tool support following building variant"
@@ -67,7 +61,7 @@ cd ./android
 source build/envsetup.sh
 lunch ${TARGET_DEVICE}-${VARIANT}
 extract-bsp
-make -j8
+make -j4
 pack
 cd ../lichee/tools/pack_brandy
 ls -l

@@ -45,11 +45,8 @@ Run build.sh to select a target build.
 > 1. BPI_M1_HDMI
 > 2. BPI_R1_HDMI
 > 3. BPI_M1Plus_HDMI
-> 4. BPI_M1_LCD
-> 5. BPI_R1_LCD
-> 6. BPI_M1Plus_LCD
 	
-> Please choose a target(1-6): 3
+> Please choose a target(1-3): 3
 > 
 > 1. userdebug
 > 2. eng
@@ -58,10 +55,6 @@ Run build.sh to select a target build.
 >Please choose a variant(1-3): 2
 > 
 > TARGET_DEVICE=bpi_m1plus_hdmi VARIANT=eng
-
-LCD build type for all target is not working now.
-
-
 
 
 
