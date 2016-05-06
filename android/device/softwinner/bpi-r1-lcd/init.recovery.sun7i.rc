@@ -1,2 +1,0 @@
-on init
-    insmod /sun7i-ir.ko
