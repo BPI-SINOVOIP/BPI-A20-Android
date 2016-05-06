@@ -16,7 +16,7 @@ echo "	2. BPI_R1_HDMI"
 echo "	3. BPI_M1Plus_HDMI"
 echo "------------------------------------------"
 
-read -p "Please choose a target(1-6): " board
+read -p "Please choose a target(1-3): " board
 echo
 
 if [ -z "$board" ]; then
