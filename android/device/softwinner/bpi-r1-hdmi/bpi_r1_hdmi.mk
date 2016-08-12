@@ -30,8 +30,9 @@ PRODUCT_COPY_FILES += \
 	device/softwinner/bpi-r1-hdmi/sun7i-ir.kl:system/usr/keylayout/sun7i-ir.kl \
 	device/softwinner/bpi-r1-hdmi/tp.idc:system/usr/idc/tp.idc 
 
-#PRODUCT_COPY_FILES += \
-	device/softwinner/bpi-r1-hdmi/initlogo.rle:root/initlogo.rle
+PRODUCT_COPY_FILES += \
+	device/softwinner/bpi-r1-hdmi/initlogo.rle:root/initlogo.rle \
+	device/softwinner/bpi-m1-hdmi/bootanimation.zip:system/media/bootanimation.zip
 
 PRODUCT_COPY_FILES += \
 	device/softwinner/bpi-r1-hdmi/vold.fstab:system/etc/vold.fstab
