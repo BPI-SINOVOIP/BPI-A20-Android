@@ -827,7 +827,7 @@ void phy_state_machine(struct work_struct *work)
 	if (phydev->adjust_state)
 		phydev->adjust_state(phydev->attached_dev);
 
-	printk(KERN_ERR "%s: phydev->state = %d\n", __func__, phydev->state);
+	//printk(KERN_ERR "%s: phydev->state = %d\n", __func__, phydev->state);
 
 	switch(phydev->state) {
 		case PHY_DOWN:
