@@ -58,6 +58,13 @@ cd ./lichee
 ./build.sh -p sun7i_android
 cd ..
 cd ./android
+
+echo "Setting CCACHE..."
+export USE_CCACHE=1
+export CCACHE_DIR=/home/dangku/mydroid/bananaPi/r1/source/android/ccache
+
+prebuilts/misc/linux-x86/ccache/ccache -M 100G
+
 source build/envsetup.sh
 lunch ${TARGET_DEVICE}-${VARIANT}
 extract-bsp
