@@ -1173,7 +1173,7 @@ public final class PowerManagerService extends IPowerManager.Stub
     
     private void chanceLedStatus(int status){
         char portType = 'h';
-        int portNum = 20;
+        int portNum = 24;
         Gpio.writeGpio(portType, portNum, status);      
     }
 
