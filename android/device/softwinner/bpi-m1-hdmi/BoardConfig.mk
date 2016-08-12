@@ -32,7 +32,7 @@ TARGET_SIMCOM_USED := false
 # wifi and bt configuration
 
 # 1. Wifi Configuration
-#BOARD_WIFI_VENDOR := realtek
+BOARD_WIFI_VENDOR := realtek
 #BOARD_WIFI_VENDOR := broadcom
 
 # 1.1 realtek wifi support
