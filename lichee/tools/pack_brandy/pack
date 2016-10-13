@@ -53,6 +53,7 @@ PACK_BOARD=${FLAGS_board}
 PACK_DEBUG=${FLAGS_debug_mode}
 PACK_SIG=${FLAGS_signture}
 PACK_MODE=${FLAGS_pack_mode}
+PACK_TIME=`date +%Y%m%d-%H%M`
 
 ROOT_DIR=`pwd`
 TOOLS_DIR="${ROOT_DIR}/pctools/linux"
@@ -278,15 +279,15 @@ function do_pack_android()
     local IMG_NAME
     if [ $PACK_DEBUG = "card0" ] ; then
         if [ ${PACK_SIG} = "sig" ]; then
-        IMG_NAME="${PACK_CHIP}_${PACK_PLATFORM}_${PACK_BOARD}_${PACK_DEBUG}_${PACK_SIG}.img"
+        IMG_NAME="${PACK_CHIP}_${PACK_PLATFORM}_${PACK_BOARD}_${PACK_DEBUG}_${PACK_SIG}_${PACK_TIME}.img"
         else
-        IMG_NAME="${PACK_CHIP}_${PACK_PLATFORM}_${PACK_BOARD}_${PACK_DEBUG}.img"
+        IMG_NAME="${PACK_CHIP}_${PACK_PLATFORM}_${PACK_BOARD}_${PACK_DEBUG}_${PACK_TIME}.img"
         fi
     else
         if [ ${PACK_SIG} = "sig" ]; then
-        IMG_NAME="${PACK_CHIP}_${PACK_PLATFORM}_${PACK_BOARD}_${PACK_SIG}.img"
+        IMG_NAME="${PACK_CHIP}_${PACK_PLATFORM}_${PACK_BOARD}_${PACK_SIG}_${PACK_TIME}.img"
         else
-        IMG_NAME="${PACK_CHIP}_${PACK_PLATFORM}_${PACK_BOARD}.img"
+        IMG_NAME="${PACK_CHIP}_${PACK_PLATFORM}_${PACK_BOARD}_${PACK_TIME}.img"
         fi
     fi
     
@@ -387,9 +388,9 @@ function do_pack_linux()
     
     local IMG_NAME
     if [ $PACK_DEBUG = "card0" ] ; then
-        IMG_NAME="${PACK_CHIP}_${PACK_PLATFORM}_${PACK_BOARD}_${PACK_DEBUG}.img"
+        IMG_NAME="${PACK_CHIP}_${PACK_PLATFORM}_${PACK_BOARD}_${PACK_DEBUG}_${PACK_TIME}.img"
     else
-        IMG_NAME="${PACK_CHIP}_${PACK_PLATFORM}_${PACK_BOARD}.img"
+        IMG_NAME="${PACK_CHIP}_${PACK_PLATFORM}_${PACK_BOARD}_${PACK_TIME}.img"
     fi
     
     echo "imagename = ${IMG_NAME}" >> image.cfg
@@ -460,7 +461,7 @@ do_pack_dump()
     sed -i 's/\\\\/\//g' image.cfg
     sed -i 's/imagename/;imagename/g' image.cfg
 
-	IMG_NAME="${PACK_CHIP}_${PACK_PLATFORM}_${PACK_BOARD}_${PACK_MODE}.img"
+	IMG_NAME="${PACK_CHIP}_${PACK_PLATFORM}_${PACK_BOARD}_${PACK_MODE}_${PACK_TIME}.img"
 
     echo "imagename = $IMG_NAME" >> image.cfg
     echo "" >> image.cfg
@@ -526,9 +527,9 @@ function do_pack_dragonboard()
     
     local IMG_NAME
     if [ $PACK_DEBUG = "card0" ] ; then
-        IMG_NAME="${PACK_CHIP}_${PACK_PLATFORM}_${PACK_BOARD}_${PACK_DEBUG}.img"
+        IMG_NAME="${PACK_CHIP}_${PACK_PLATFORM}_${PACK_BOARD}_${PACK_DEBUG}_${PACK_TIME}.img"
     else
-        IMG_NAME="${PACK_CHIP}_${PACK_PLATFORM}_${PACK_BOARD}.img"
+        IMG_NAME="${PACK_CHIP}_${PACK_PLATFORM}_${PACK_BOARD}_${PACK_TIME}.img"
     fi
     
     echo "imagename = ${IMG_NAME}" >> image.cfg
@@ -604,9 +605,9 @@ function do_pack_prvt()
     
     local IMG_NAME
     if [ $PACK_DEBUG = "card0" ] ; then
-        IMG_NAME="${PACK_CHIP}_${PACK_PLATFORM}_${PACK_BOARD}_${PACK_DEBUG}_${PACK_MODE}.img"
+        IMG_NAME="${PACK_CHIP}_${PACK_PLATFORM}_${PACK_BOARD}_${PACK_DEBUG}_${PACK_MODE}_${PACK_TIME}.img"
     else
-        IMG_NAME="${PACK_CHIP}_${PACK_PLATFORM}_${PACK_BOARD}_${PACK_MODE}.img"
+        IMG_NAME="${PACK_CHIP}_${PACK_PLATFORM}_${PACK_BOARD}_${PACK_MODE}_${PACK_TIME}.img"
     fi
     
     echo "imagename = ${IMG_NAME}" >> image.cfg
