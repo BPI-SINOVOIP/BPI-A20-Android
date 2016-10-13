@@ -85,4 +85,7 @@ xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <string name="wifi_password_key_incorrect">Password key maybe incorrect, wifi connecting has been interrupted.</string>
     
     <string name="storage_sata">SATA Disk</string>
+    <string name="storage_usbhost0">USB OTG Disk</string>
+    <string name="storage_usbhost1">USB Host1 Disk</string>
+    <string name="storage_usbhost2">USB Host2 Disk</string>
 </resources>

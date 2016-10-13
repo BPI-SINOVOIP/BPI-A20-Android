@@ -91,4 +91,7 @@
     <string name="ignore_requests">忽略所有请求</string>
 
     <string name="storage_sata">SATA 大硬盘</string>
+    <string name="storage_usbhost0">USB OTG 存储器</string>
+    <string name="storage_usbhost1">USB Host1 存储器</string>
+    <string name="storage_usbhost2">USB Host2 存储器</string>
 </resources>
