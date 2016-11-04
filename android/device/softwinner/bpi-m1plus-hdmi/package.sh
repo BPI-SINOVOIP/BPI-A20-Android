@@ -1,6 +1,7 @@
 #!/bin/bash
 DEBUG="uart0"
 SIGMODE="none"
+VERSION="4.2.2"
 
 if [ "$1" = "-d" -o "$2" = "-d" ]; then
 	echo "----------debug version, have card0 printf-----------"
@@ -11,5 +12,5 @@ fi
 
 
 cd $PACKAGE
-  ./pack -c sun7i -p android -b bpi-m1plus-hdmi  -d ${DEBUG} -s ${SIGMODE}
+  ./pack -c sun7i -p android -v ${VERSION} -b bpi-m1plus-hdmi  -d ${DEBUG} -s ${SIGMODE}
 cd -
